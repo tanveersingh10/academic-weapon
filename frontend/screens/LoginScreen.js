@@ -1,21 +1,38 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';
+
 
 const LoginScreen = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
 
-    const handleSignUp = () => {
-            createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredentials => {
-                const user = userCredentials.user
-                console.log(user.email)
-            })
-            .catch(error => alert(error));
+    const navigation = useNavigation()
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                navigation.navigate("Home")
+              }
+            
+        return unsubscribe;
+              
+        })
+    }, [])
+
+    
+
+    const handleLogin = () => {
+        signInWithEmailAndPassword(auth, email, password)
+        .then(userCredentials => {
+            const user = userCredentials.user
+            console.log("Logged in with " + user.email)
+        })
     }
+    
     
   return (
     <KeyboardAvoidingView style={styles.container}  behavior="padding">
@@ -37,13 +54,13 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => {}} style={styles.button}>
+            <TouchableOpacity onPress={handleLogin} style={styles.button}>
                 <Text > 
                     Log in
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={handleSignUp} style={[styles.button, styles.buttonOutline]}>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")} style={[styles.button, styles.buttonOutline]}>
                 <Text style={styles.buttonText}> 
                     Register
                 </Text>
@@ -93,7 +110,7 @@ const styles = StyleSheet.create({
       borderWidth: 2,
     },
     buttonText: {
-      color: 'white',
+      color: '#0782F9',
       fontWeight: '700',
       fontSize: 16,
     },
