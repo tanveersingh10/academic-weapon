@@ -1,7 +1,7 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {
@@ -30,8 +30,25 @@ const RegisterScreen = () => {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user
+            sendEmailVerification(auth.currentUser)
+            .then(() => {
+            // Email verification sent
+            Alert.alert(
+                "Success",
+                "Email verification sent!",
+                [
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+              );
+            })
+            .catch((error) => {
+            // Error sending email verification
+            Alert.alert("Error sending email verification");
+            console.log("Error sending email verification: ", error.message);
+        });
             console.log("Registered " + user.email)
-            navigation.navigate("Home");
+            navigation.navigate("Verification");  // Navigate to VerificationScreen
         })
         .catch(error => alert(error));
     }
@@ -66,11 +83,17 @@ const RegisterScreen = () => {
             <View style={styles.buttonContainer}>
     
                 <TouchableOpacity onPress={handleSignUp} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonText}> 
+                    <Text style={styles.buttonOutlineText}> 
                         Register
                     </Text>
                 </TouchableOpacity>
-    
+
+            </View>
+
+            <View style={styles.bottomButtonContainer}>
+                <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
+                    <Text style={styles.buttonOutlineText}> Back </Text>
+                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     )
@@ -123,5 +146,9 @@ const styles = StyleSheet.create({
       fontWeight: '700',
       fontSize: 16,
     },
+    bottomButtonContainer: {
+        position: 'absolute',
+        bottom: 20
+    }
   })
 

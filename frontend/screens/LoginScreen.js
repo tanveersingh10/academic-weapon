@@ -1,7 +1,7 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -14,14 +14,19 @@ const LoginScreen = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                navigation.navigate("Home")
-              }
-            
-        return unsubscribe;
-              
+          if (user) {
+            // Check if the email is verified
+            if (user.emailVerified) {
+              navigation.navigate("Home");
+            } else {
+              // Display an error message or prompt the user to verify their email
+              console.log("Please verify your email");
+            }
+          }
         })
-    }, [])
+        return unsubscribe;
+    }, []);
+    
 
     
 
@@ -29,9 +34,27 @@ const LoginScreen = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user
-            console.log("Logged in with " + user.email)
+            if (user.emailVerified) {
+                console.log("Logged in with " + user.email)
+                navigation.navigate("Home");
+            } else {
+                // If email is not verified, ask the user to verify the email
+                Alert.alert(
+                    "Verification Required",
+                    "Please verify your email before logging in",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ],
+                    { cancelable: false }
+                );
+                console.log("Please verify your email before logging in");
+            }
         })
-    }
+        .catch(error => {
+            // If there's an error signing in, display the error message
+            alert(error.message);
+        });
+    };
     
     
   return (
@@ -62,10 +85,16 @@ const LoginScreen = () => {
 
             <TouchableOpacity onPress={() => navigation.navigate("Register")} style={[styles.button, styles.buttonOutline]}>
                 <Text style={styles.buttonText}> 
-                    Register
+                    Don't have an account? Sign up!
                 </Text>
             </TouchableOpacity>
 
+        </View>
+
+        <View style={styles.bottomButtonContainer}>
+            <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
+                <Text style={styles.buttonText}> Back </Text>
+            </TouchableOpacity>
         </View>
     </KeyboardAvoidingView>
       
@@ -118,5 +147,9 @@ const styles = StyleSheet.create({
       color: '#0782F9',
       fontWeight: '700',
       fontSize: 16,
+    },
+    bottomButtonContainer: {
+        position: 'absolute',
+        bottom: 20
     },
   })
