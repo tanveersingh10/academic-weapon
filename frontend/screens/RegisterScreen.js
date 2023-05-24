@@ -54,7 +54,7 @@ const RegisterScreen = () => {
     }
 
     return (
-        <KeyboardAvoidingView style={styles.container}  behavior="padding">
+        <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.inputContainer}>
                 <TextInput 
                 placeholder="Email"     

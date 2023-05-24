@@ -58,7 +58,7 @@ const LoginScreen = () => {
     
     
   return (
-    <KeyboardAvoidingView style={styles.container}  behavior="padding">
+    <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.inputContainer}>
             <TextInput 
             placeholder="Email"     
@@ -80,6 +80,12 @@ const LoginScreen = () => {
             <TouchableOpacity onPress={handleLogin} style={styles.button}>
                 <Text > 
                     Log in
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")} style={[styles.button, styles.buttonOutline]}>
+                <Text style={styles.buttonText}> 
+                    Forgot Password?
                 </Text>
             </TouchableOpacity>
 

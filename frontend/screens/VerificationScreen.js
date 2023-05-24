@@ -18,7 +18,7 @@ const VerificationScreen = ({ navigation }) => {
         });
 
         return unsubscribe;
-    }, [navigation]);
+    }, [navigation, reloadToggle]);
 
     return (
         <KeyboardAvoidingView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
