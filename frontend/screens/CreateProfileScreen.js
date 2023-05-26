@@ -17,6 +17,8 @@ const CreateProfileScreen = () => {
     const [studySpot, setStudySpot] = useState('');
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
+    
+    const userId = auth.currentUser.uid;
 
     const uploadImageToFirebase = async (uri) => {
         try {
@@ -91,7 +93,8 @@ const CreateProfileScreen = () => {
             gender,
             studySpot,
             bio,
-            image: imageUrl
+            image: imageUrl,
+            userId: userId
         };
 
         // Save the profile to Firebase
@@ -280,7 +283,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         padding: 10,
       },
-        bioInput: {
+    bioInput: {
         height: 120,
         borderColor: 'gray',
         borderWidth: 1,

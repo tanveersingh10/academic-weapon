@@ -17,7 +17,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen options={{ headerShown: false }} name="CreateProfile" component={CreateProfileScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomeScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
@@ -25,6 +24,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen options={{ headerShown: false }} name="PasswordResetted" component={PasswordResettedScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Verification" component={VerificationScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="CreateProfile" component={CreateProfileScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

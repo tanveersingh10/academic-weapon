@@ -36,7 +36,7 @@ const LoginScreen = () => {
             const user = userCredentials.user
             if (user.emailVerified) {
                 console.log("Logged in with " + user.email)
-                navigation.navigate("Home");
+                navigation.navigate("CreateProfile");
             } else {
                 // If email is not verified, ask the user to verify the email
                 Alert.alert(
