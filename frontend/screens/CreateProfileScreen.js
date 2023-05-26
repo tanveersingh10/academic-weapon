@@ -116,7 +116,7 @@ const CreateProfileScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <ScrollView>
+            <ScrollView style={{ flex: 1 }}>
 
                 <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30}}>Create your profile!</Text>
                 
@@ -130,7 +130,7 @@ const CreateProfileScreen = () => {
                 <Text>Choose your faculty</Text>
                 <Picker
                     selectedValue={faculty}
-                    style={{width: 200}}
+                    style={{width: 200, marginBottom: 20}}
                     onValueChange={(itemValue, itemIndex) =>
                         setFaculty(itemValue)
                     }>
@@ -146,7 +146,7 @@ const CreateProfileScreen = () => {
                 <Text> Year of study </Text>
                 <Picker
                     selectedValue={yearOfStudy}
-                    style={{width: 200}}
+                    style={{width: 200, marginBottom: 20}}
                     onValueChange={(itemValue, itemIndex) =>
                         setYearOfStudy(itemValue)
                     }>
@@ -157,9 +157,10 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="Post-grad" value ="postgrad" />
                 </Picker>
 
+                <Text> Gender </Text>
                 <Picker
                     selectedValue={gender}
-                    style={{width: 200}}
+                    style={{width: 200, marginBottom: 20}}
                     onValueChange={(itemValue, itemIndex) =>
                         setGender(itemValue)
                     }>
@@ -171,7 +172,7 @@ const CreateProfileScreen = () => {
                 <Text> Enter the module codes separated by commas! </Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="module codes"
+                    placeholder="E.g. CS2030S, CS2040S"
                     value={modules.join(', ')}
                     onChangeText={handleModuleInputChange}
                 />
@@ -179,7 +180,7 @@ const CreateProfileScreen = () => {
                 <Text> Tell other students about your interests and hobbies!</Text>
                 <TextInput 
                     style={styles.bioInput}
-                    placeholder="Your bio"
+                    placeholder="Enter Your Bio Here"
                     value={bio}
                     multiline
                     onChangeText={setBio}
@@ -188,7 +189,7 @@ const CreateProfileScreen = () => {
                 <Text>Where do you prefer to study?</Text>
                 <Picker
                     selectedValue={studySpot}
-                    style={{width: 200}}
+                    style={{width: 200, marginBottom: 20}}
                     onValueChange={(itemValue, itemIndex) =>
                         setStudySpot(itemValue)
                     }>
@@ -227,6 +228,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      padding: 20,
     },
     inputContainer: {
       width: '80%'
@@ -275,14 +277,14 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        marginBottom: 10,
+        marginBottom: 30,
         padding: 10,
       },
         bioInput: {
         height: 120,
         borderColor: 'gray',
         borderWidth: 1,
-        marginBottom: 10,
+        marginBottom: 20,
         paddingHorizontal: 10,
         paddingTop: 10,
     },
