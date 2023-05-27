@@ -1,9 +1,9 @@
 import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { auth } from '../firebase';
+import { auth, db, profilesReference } from '../firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged, } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-
+import { doc, getDoc, query, where } from "firebase/firestore";
 
 const LoginScreen = () => {
 
@@ -35,8 +35,29 @@ const LoginScreen = () => {
         .then(userCredentials => {
             const user = userCredentials.user
             if (user.emailVerified) {
-                console.log("Logged in with " + user.email)
-                navigation.navigate("CreateProfile");
+              // If profile already created, directs to HomeScreen immediately
+              const userId = auth.currentUser.uid;
+              const checkIfEmailExists = async (userId) => {
+               // const usersRef = db.collection('profiles');
+                //const docRef = doc(db, "profiles", userId);
+                //const snapshot = await getDoc(docRef);
+                try {
+                  const snapshot = query(profilesReference, where("userId", "==", userId));
+                  console.log(snapshot)
+                  const querySnapshot = await getDocs(snapshot);
+                  console.log(querySnapshot)
+                  if (querySnapshot) {
+                    navigation.navigate("HomeScreen")
+                  } else {
+                    console.log("Logged in with " + user.email)
+                    navigation.navigate("CreateProfile");
+                  }
+                } catch(error) {
+                  console.log(error)
+                }
+                
+              }
+              checkIfEmailExists(userId)
             } else {
                 // If email is not verified, ask the user to verify the email
                 Alert.alert(

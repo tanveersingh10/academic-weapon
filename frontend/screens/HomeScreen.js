@@ -1,32 +1,52 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { signOut } from 'firebase/auth'
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 
 const HomeScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const userId = auth.currentUser.uid;
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const usersRef = doc(db, "profiles", userId);
+        const querySnapshot = await getDoc(docRef);
+
+        if (querySnapshot.exists()) {
+          const data = querySnapshot.docs[0].data();
+          setUserName(data.name);
+        } else {
+          console.log('No user found!');
+        }
+      } catch (error) {
+        console.error('Error getting user:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
-        navigation.replace("Login")
+        navigation.replace('Login');
       })
-      .catch(error => alert(error.message))
-  }
+      .catch(error => alert(error.message));
+  };
 
   return (
     <View style={styles.container}>
       <Text>Email: {auth.currentUser?.email}</Text>
-      <TouchableOpacity
-        onPress={handleSignOut}
-        style={styles.button}
-      >
+      <Text>{userName}</Text>
+      <TouchableOpacity onPress={handleSignOut} style={styles.button}>
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
 
 export default HomeScreen
 
