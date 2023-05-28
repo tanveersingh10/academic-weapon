@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
+import BackButton  from '../components/BackButton'
 
 const RegisterScreen = () => {
 
@@ -55,6 +56,7 @@ const RegisterScreen = () => {
 
     return (
         <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <BackButton />
             <View style={styles.inputContainer}>
                 <TextInput 
                 placeholder="Email"     

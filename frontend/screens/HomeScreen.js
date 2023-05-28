@@ -3,31 +3,42 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { signOut } from 'firebase/auth'
 import { auth, db } from '../firebase'
+import { doc, getDoc, query, where } from "firebase/firestore";
+import {getUserProfile} from '../utils/userProfile'
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const userId = auth.currentUser.uid;
-  const [userName, setUserName] = useState('');
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const usersRef = doc(db, "profiles", userId);
-        const querySnapshot = await getDoc(docRef);
+    getUserProfile(userId) 
+    .then((userProfile) => {
+      setName(userProfile.name);
+    })
+    .catch((error) => {
+      console.error('Error getting profile:', error);
+    })
+  }, [])
+    
+  //   const fetchData = async () => {
+  //     try {
+  //       const usersRef = doc(db, "profiles", userId);
+  //       const querySnapshot = await getDoc(usersRef);
 
-        if (querySnapshot.exists()) {
-          const data = querySnapshot.docs[0].data();
-          setUserName(data.name);
-        } else {
-          console.log('No user found!');
-        }
-      } catch (error) {
-        console.error('Error getting user:', error);
-      }
-    };
+  //       if (querySnapshot.exists()) {
+  //         const data = querySnapshot.docs[0].data();
+  //         setName(data.name);
+  //       } else {
+  //         console.log('No user found!');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error getting user:', error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -37,13 +48,20 @@ const HomeScreen = () => {
       .catch(error => alert(error.message));
   };
 
+
+
   return (
     <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
-      <Text>{userName}</Text>
+      <Text style={{fontSize: 20}}>Welcome {name}!</Text>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
+
+
+      <TouchableOpacity onPress={() => navigation.navigate("ViewProfile")} style={styles.button}>
+        <Text style={styles.buttonText}>View Profile</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };

@@ -1,9 +1,10 @@
-import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth, db, profilesReference } from '../firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged, } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-import { doc, getDoc, query, where } from "firebase/firestore";
+import { doc, getDocs, query, where } from "firebase/firestore";
+import BackButton from '../components/BackButton';
 
 const LoginScreen = () => {
 
@@ -12,24 +13,6 @@ const LoginScreen = () => {
 
     const navigation = useNavigation()
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // Check if the email is verified
-            if (user.emailVerified) {
-              navigation.navigate("Home");
-            } else {
-              // Display an error message or prompt the user to verify their email
-              console.log("Please verify your email");
-            }
-          }
-        })
-        return unsubscribe;
-    }, []);
-    
-
-    
-
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
@@ -37,16 +20,12 @@ const LoginScreen = () => {
             if (user.emailVerified) {
               // If profile already created, directs to HomeScreen immediately
               const userId = auth.currentUser.uid;
-              const checkIfEmailExists = async (userId) => {
-               // const usersRef = db.collection('profiles');
-                //const docRef = doc(db, "profiles", userId);
-                //const snapshot = await getDoc(docRef);
+              const checkIfProfileExists = async (userId) => {
                 try {
-                  const snapshot = query(profilesReference, where("userId", "==", userId));
-                  console.log(snapshot)
-                  const querySnapshot = await getDocs(snapshot);
+                  const q = query(profilesReference, where("userId", "==", userId));
+                  const querySnapshot = await getDocs(q);
                   console.log(querySnapshot)
-                  if (querySnapshot) {
+                  if (querySnapshot.docs.length > 0) {
                     navigation.navigate("HomeScreen")
                   } else {
                     console.log("Logged in with " + user.email)
@@ -55,9 +34,9 @@ const LoginScreen = () => {
                 } catch(error) {
                   console.log(error)
                 }
-                
               }
-              checkIfEmailExists(userId)
+              
+              checkIfProfileExists(userId)
             } else {
                 // If email is not verified, ask the user to verify the email
                 Alert.alert(
@@ -79,51 +58,55 @@ const LoginScreen = () => {
     
     
   return (
-    <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View style={styles.inputContainer}>
-            <TextInput 
-            placeholder="Email"     
-            value={email}
-            onChangeText={text => setEmail(text)}
-            style = {styles.input}
-            /> 
-             <TextInput 
-            placeholder="Password" 
-            value = {password}
-            onChangeText={text => setPassword(text)}
-            style = {styles.input}
-            secureTextEntry
-            /> 
+    
+      <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-        </View>
+        <BackButton navigation={navigation}/> 
+          
+          <View style={styles.inputContainer}>
+              <TextInput 
+              placeholder="Email"     
+              value={email}
+              onChangeText={text => setEmail(text)}
+              style = {styles.input}
+              /> 
+              <TextInput 
+              placeholder="Password" 
+              value = {password}
+              onChangeText={text => setPassword(text)}
+              style = {styles.input}
+              secureTextEntry
+              /> 
 
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={handleLogin} style={styles.button}>
-                <Text > 
-                    Log in
-                </Text>
-            </TouchableOpacity>
+          </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")} style={[styles.button, styles.buttonOutline]}>
-                <Text style={styles.buttonText}> 
-                    Forgot Password?
-                </Text>
-            </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={handleLogin} style={styles.button}>
+                  <Text > 
+                      Log in
+                  </Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate("Register")} style={[styles.button, styles.buttonOutline]}>
-                <Text style={styles.buttonText}> 
-                    Don't have an account? Sign up!
-                </Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")} style={[styles.button, styles.buttonOutline]}>
+                  <Text style={styles.buttonText}> 
+                      Forgot Password?
+                  </Text>
+              </TouchableOpacity>
 
-        </View>
+              <TouchableOpacity onPress={() => navigation.navigate("Register")} style={[styles.button, styles.buttonOutline]}>
+                  <Text style={styles.buttonText}> 
+                      Don't have an account? Sign up!
+                  </Text>
+              </TouchableOpacity>
 
-        <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonText}> Back </Text>
-            </TouchableOpacity>
-        </View>
-    </KeyboardAvoidingView>
+          </View>
+
+          <View style={styles.bottomButtonContainer}>
+              <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
+                  <Text style={styles.buttonText}> Back </Text>
+              </TouchableOpacity>
+          </View>
+      </KeyboardAvoidingView>
       
   )
 }
