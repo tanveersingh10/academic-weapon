@@ -47,6 +47,7 @@ Implement a friendly user interface that students would enjoy using
 
 **Current Progress**
 Implemented user authentication - users able to log in and register using their nus email account. email verification also required upon registering for an account
+
 Implemented profile creation - users are able to create a profile upon registering for an account and input details such as name, faculty and more about themselves as well as insert a profile picture. users will be able to update their profile through the update profile button in the home page
 Ensured flow of app - welcome screen, login screen and home screen etc all created and users will be able to navigate through different pages in the app smoothly
 Ensured compatibality for both IOS and Android users - tested the app on both android and ios devices and ensured it runs smoothly on both versions
