@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, Button, TextInput, Image, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View, Button, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { auth, db, profilesReference, storage  } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
-import { addDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
+import { doc, getDocs, query, where } from "firebase/firestore";
+import { pickImage, uploadImageToFirebase } from '../utils/imageUpload';
 import BackButton from '../components/BackButton';
-import {uploadImageToFirebase, pickImage} from '../utils/imageUpload'
+import { getUserProfile } from '../utils/userProfile';
 
-const CreateProfileScreen = () => {
+const EditProfileScreen = () => {
 
     const [name, setName] = useState('');
     const [school, setSchool] = useState('');
@@ -20,63 +22,30 @@ const CreateProfileScreen = () => {
     const [studySpot, setStudySpot] = useState('');
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
-    
+    const [imageChanged, setImageChanged] = useState(false);
+
     const userId = auth.currentUser.uid;
-
-    // const uploadImageToFirebase = async (uri) => {
-    //     try {
-    //         const blob = await (await fetch(uri)).blob();
-    //         const filename = new Date().getTime().toString();
-    //         const imageRef = ref(storage, `images/${filename}`);
-    //         const uploadTask = uploadBytesResumable(imageRef, blob);
-            
-    //         return new Promise((resolve, reject) => {
-    //             uploadTask.on('state_changed', 
-    //                 (snapshot) => {
-    //                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //                     console.log('Upload is ' + progress + '% done');
-    //                 }, 
-    //                 (error) => {
-    //                     console.log(error);
-    //                     reject(error);
-    //                 }, 
-    //                 () => {
-    //                     getDownloadURL(uploadTask.snapshot.ref)
-    //                     .then((downloadURL) => {
-    //                         console.log('File available at', downloadURL);
-    //                         resolve(downloadURL);
-    //                     });
-    //                 }
-    //             );
-    //         });
-
-    //     } catch (e) {
-    //         console.error(e);
-    //         return null;
-    //     }
-    // };
-
-    
-
-    
-    // const pickImage = async () => {
-    //     // No permissions request is necessary for launching the image library
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //       mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //       allowsEditing: true,
-    //       aspect: [4, 3],
-    //       quality: 1,
-    //     });
-    
-    //     console.log(result);
-    
-    //     if (!result.canceled) {
-    //       setImage(result.assets[0].uri);
-    //     }
-    // };
+    const navigation = useNavigation();
 
 
-    const navigation = useNavigation()
+    useEffect(() => {
+        getUserProfile(userId)
+            .then((userProfile) => {
+                setName(userProfile.name);
+                setSchool(userProfile.school);
+                setYearOfStudy(userProfile.yearOfStudy);
+                setCourse(userProfile.course);
+                setModules(userProfile.modules);
+                setGender(userProfile.gender);
+                setStudySpot(userProfile.studySpot);
+                setBio(userProfile.bio);
+                setImage(userProfile.image);
+                setImageChanged(false);
+            })
+            .catch((error) => {
+                console.error('Error getting profile:', error);
+            });
+    }, []);
 
     const handleModuleInputChange = (text) => {
         // Split the entered module codes by commas and trim any extra whitespace
@@ -84,11 +53,14 @@ const CreateProfileScreen = () => {
         setModules(moduleCodes);
     };
 
-    const handleCreateProfile = async () => {
+    const handleEditProfile = async () => {
+
         let imageUrl = image;
-        if (image) {
+        if (image && imageChanged) {
             imageUrl = await uploadImageToFirebase(image);
+            console.log(imageUrl)
         }
+
         // Construct the profile object
         const profile = {
             name,
@@ -104,33 +76,27 @@ const CreateProfileScreen = () => {
         };
 
         // Save the profile to Firebase
-        addDoc(profilesReference, profile)
-            .then(() => {
-                console.log('Profile created successfully!');
-                // Reset the form after successful submission
-                setName('');
-                setSchool('');
-                setYearOfStudy('');
-                setCourse('');
-                setModules([]);
-                setGender('');
-                setStudySpot('');
-                setBio('');
-                navigation.navigate("HomeScreen")
-            })
-            .catch((error) => {
-                console.error('Error creating profile:', error);
-            });
+        try {
+            const q = query(profilesReference, where('userId', '==', userId));
+            const querySnapshot = await getDocs(q);
+            let docId = "";
+            querySnapshot.forEach((doc) => {docId = doc.id});
+            let docRef = doc(db, "profiles", docId)
+            await updateDoc(docRef, profile)
+            console.log('Profile edited successfully!');
+            navigation.navigate("HomeScreen");
+        } catch(error) {
+            console.error('Error creating profile:', error);
+        }  
     };
 
-
-
     return (
-        <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <ScrollView style={{ flex: 1 }}>
-                <BackButton />
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <BackButton/>
 
-                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30}}>Create your profile!</Text>
+            <ScrollView style={{ flex: 1 }}>
+                
+                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30}}>Edit your profile!</Text>
                 
                 <TextInput
                     style={styles.input}
@@ -153,7 +119,7 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="SIM" value="sim" />
                 </Picker> 
 
-                <Text>Choose your Course!</Text>
+                <Text>Choose your course!</Text>
                 <Picker
                     selectedValue={course}
                     style={{width: 200, marginBottom: 20}}
@@ -219,7 +185,7 @@ const CreateProfileScreen = () => {
                     onValueChange={(itemValue, itemIndex) =>
                         setStudySpot(itemValue)
                     }>
-                    <Picker.Item label="In School" value="school" />
+                    <Picker.Item label="In NUS" value="nus" />
                     <Picker.Item label="Libraries" value="libraries" />
                     <Picker.Item label="Cafes" value="cafes" />
                     <Picker.Item label="Anything goes!" value="anything" />
@@ -229,25 +195,29 @@ const CreateProfileScreen = () => {
 
                 <Text>Upload a picture of yourself if you'd like!</Text>
 
-                <Button title="Pick an image from camera roll" onPress={pickImage} />
+                <Button title="Pick an image from camera roll" onPress={async () => {
+                    const uri = await pickImage();
+                    if(uri) {
+                        setImage(uri);
+                        setImageChanged(true);
+                    }
+            }} />
                 {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
 
-                <TouchableOpacity onPress={handleCreateProfile} style={[styles.button, styles.buttonOutline]}>
+                <TouchableOpacity onPress={handleEditProfile} style={[styles.button, styles.buttonOutline]}>
                     <Text style={styles.buttonText}> 
                         I'm ready!
                     </Text>
                 </TouchableOpacity>
                 
-          
             </ScrollView>
             
 
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     )
-
 }
 
-export default CreateProfileScreen;
+export default EditProfileScreen;
 
 const styles = StyleSheet.create({
     container: {

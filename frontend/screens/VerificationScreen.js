@@ -11,7 +11,7 @@ const VerificationScreen = ({ navigation }) => {
             if (user) {
                 reload(user).then(() => {
                     if (user.emailVerified) {
-                        navigation.navigate('Home');
+                        navigation.navigate('CreateProfile');
                     }
                 });
             }
