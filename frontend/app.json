@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AcademicWeapon",
-    "slug": "AcademicWeapon",
+    "slug": "academic-weapon",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,23 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.tanveersingh10.academicweapon"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0df69057-5acb-4b20-89db-009ef3960e2c"
+      }
+    },
+    "owner": "tanveersingh10",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/0df69057-5acb-4b20-89db-009ef3960e2c"
     }
   }
 }

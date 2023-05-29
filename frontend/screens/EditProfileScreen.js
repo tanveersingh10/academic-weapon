@@ -185,7 +185,7 @@ const EditProfileScreen = () => {
                     onValueChange={(itemValue, itemIndex) =>
                         setStudySpot(itemValue)
                     }>
-                    <Picker.Item label="In NUS" value="nus" />
+                    <Picker.Item label="In School" value="school" />
                     <Picker.Item label="Libraries" value="libraries" />
                     <Picker.Item label="Cafes" value="cafes" />
                     <Picker.Item label="Anything goes!" value="anything" />
