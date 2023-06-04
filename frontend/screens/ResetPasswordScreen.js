@@ -41,6 +41,12 @@ const ResetPasswordScreen = () => {
             </Text>
             </TouchableOpacity>
         </View>
+
+        <View style={styles.bottomButtonContainer}>
+                <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
+                    <Text style={styles.buttonOutlineText}> Back </Text>
+                </TouchableOpacity>
+        </View>
     </KeyboardAvoidingView>
   );
 };
@@ -93,4 +99,8 @@ const styles = StyleSheet.create({
       fontWeight: '700',
       fontSize: 16,
     },
+    bottomButtonContainer: {
+        position: 'absolute',
+        bottom: 20
+    }
   })
