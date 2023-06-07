@@ -57,11 +57,6 @@ const HomeScreen = () => {
         <Text style={styles.buttonText}>Sign out</Text>
       </TouchableOpacity>
 
-
-      <TouchableOpacity onPress={() => navigation.navigate("ViewProfile")} style={styles.button}>
-        <Text style={styles.buttonText}>View Profile</Text>
-      </TouchableOpacity>
-
     </View>
   );
 };
