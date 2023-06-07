@@ -48,27 +48,27 @@ const ViewProfileScreen = () => {
     <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <BackButton />
         <ScrollView>
-            <View style={{marginTop: 50, marginBottom: 25}}>
+            <View style={{marginTop: 30, marginBottom: 25}}>
 
                 <Image source={{uri: image}} style={{ width: 200, height: 200, borderRadius: 100  }}/>
         
 
             </View>
             <View>
-                <Text style={{fontSize:20, textAlign: 'center'}}> {name} </Text>
-            </View>
-
-            <View style={{display: 'inline-block'}}> 
-                <Text>{school}</Text>
-                <Text>{yearOfStudy}</Text>
-                <Text>{course}</Text>
+                <Text style={{fontSize:30, textAlign: 'center'}}> {name} </Text>
             </View>
 
             <View> 
-                <Text>{bio}</Text>
+                <Text style={styles.words}>{school}</Text>
+                <Text style={styles.words}>Year {yearOfStudy}</Text>
+                <Text style={styles.words}>{course}</Text>
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate("EditProfile")} style={styles.button}>
+            <View> 
+                <Text style={styles.words}>{bio}</Text>
+            </View>
+
+            <TouchableOpacity onPress={() => navigation.navigate('EditProfileScreen')} style={styles.button}>
                 <Text style={styles.buttonText}>Edit Profile</Text>
             </TouchableOpacity>
 
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
       },
       button: {
         backgroundColor: '#0782F9',
-        width: '60%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
@@ -103,9 +102,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '700',
         fontSize: 16,
-      }
-      
-
+      },
+      words: {
+        textAlign:'center',
+        fontSize:15,
+        justifyContent:'center',
+        alignItems:'center',
+    },
 
 
 })

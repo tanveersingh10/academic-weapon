@@ -1,7 +1,7 @@
 import { SafeAreaView, Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth, db, profilesReference } from '../firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged, } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, getAuth, } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { doc, getDocs, query, where } from "firebase/firestore";
 import BackButton from '../components/BackButton';

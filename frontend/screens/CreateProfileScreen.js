@@ -160,13 +160,13 @@ const CreateProfileScreen = () => {
                     onValueChange={(itemValue, itemIndex) =>
                         setCourse(itemValue)
                     }>
-                    <Picker.Item label="Business" value="business" />
-                    <Picker.Item label="Computing" value="computing" />
-                    <Picker.Item label="Dentistry" value="dentistry" />
-                    <Picker.Item label="Engineering" value="engineering" />
-                    <Picker.Item label="FASS" value="fass" />
-                    <Picker.Item label="Law" value="law" />
-                    <Picker.Item label="Medicine" value="medicine" />
+                    <Picker.Item label="Business" value="Business" />
+                    <Picker.Item label="Computing" value="Computing" />
+                    <Picker.Item label="Dentistry" value="Dentistry" />
+                    <Picker.Item label="Engineering" value="Engineering" />
+                    <Picker.Item label="FASS" value="FASS" />
+                    <Picker.Item label="Law" value="Law" />
+                    <Picker.Item label="Medicine" value="Medicine" />
                 </Picker> 
 
                 <Text> Year of study </Text>
