@@ -10,6 +10,7 @@ import SettingsScreen from "./SettingsScreen";
 import VerificationScreen from "./VerificationScreen";
 import ViewProfileScreen from "./ViewProfileScreen";
 import WelcomeScreen from "./WelcomeScreen";
+import Dashboard from "./Dashboard";
 
 export  {
     ChatScreen,
@@ -23,5 +24,6 @@ export  {
     SettingsScreen,
     VerificationScreen,
     ViewProfileScreen,
-    WelcomeScreen
+    WelcomeScreen,
+    Dashboard
 };

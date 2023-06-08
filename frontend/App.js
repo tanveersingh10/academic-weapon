@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { LoginScreen, HomeScreen, RegisterScreen, WelcomeScreen, VerificationScreen, ResetPasswordScreen, PasswordResettedScreen, CreateProfileScreen,
-    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen} from './screens';
+    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen, Dashboard} from './screens';
 import  { BottomNavigator } from './components';
 import { MD3LightTheme as DefaultTheme, PaperProvider,  } from 'react-native-paper';
 import theme from './components/theme';
@@ -39,6 +39,7 @@ export default function App() {
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
         <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomeScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />

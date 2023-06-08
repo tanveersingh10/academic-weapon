@@ -1,9 +1,9 @@
 import BackButton from "./BackButton";
 import BottomNavigator from "./BottomNavigator";
-import theme from "./theme";
+import Card from "./Card";
 
 export {
     BackButton,
     BottomNavigator,
-    theme
+    Card
 }
