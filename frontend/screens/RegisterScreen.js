@@ -1,9 +1,10 @@
-import { Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import BackButton  from '../components/BackButton'
+import {Text, Button, TextInput} from 'react-native-paper'
 
 const RegisterScreen = () => {
 
@@ -20,7 +21,7 @@ const RegisterScreen = () => {
         }
 
         //regex for e*******@u.nus.edu
-        const emailPattern = /^e[0-9]{7}@u\.nus\.edu$/; 
+        const emailPattern = /^[eE][0-9]{7}@u\.nus\.edu$/; 
     
         // Check if email matches the pattern
         if (!emailPattern.test(email)) {
@@ -59,12 +60,14 @@ const RegisterScreen = () => {
           <BackButton />
             <View style={styles.inputContainer}>
                 <TextInput 
+                dense={true}
                 placeholder="Email"     
                 value={email}
                 onChangeText={text => setEmail(text)}
                 style = {styles.input}
                 /> 
                  <TextInput 
+                dense={true}
                 placeholder="Password" 
                 value = {password}
                 onChangeText={text => setPassword(text)}
@@ -73,6 +76,7 @@ const RegisterScreen = () => {
                 /> 
 
                 <TextInput 
+                dense={true}
                 placeholder="Confirm Password" 
                 value = {confirmPassword}
                 onChangeText={text => setConfirmPassword(text)}
@@ -84,18 +88,10 @@ const RegisterScreen = () => {
     
             <View style={styles.buttonContainer}>
     
-                <TouchableOpacity onPress={handleSignUp} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonOutlineText}> 
+                <Button onPress={handleSignUp} mode="contained-tonal" style={{width: "100%"}}>
                         Register
-                    </Text>
-                </TouchableOpacity>
+                </Button>
 
-            </View>
-
-            <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
-                    <Text style={styles.buttonOutlineText}> Back </Text>
-                </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
     )

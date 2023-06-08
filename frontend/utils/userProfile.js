@@ -1,5 +1,5 @@
-import { doc, getDocs, query, where } from "firebase/firestore";
-import { auth, db, profilesReference, storage  } from '../firebase';
+import {  getDocs, query, where } from "firebase/firestore";
+import { profilesReference,   } from '../firebase';
 
 const getUserProfile = async (userId) => {
     const q = query(profilesReference, where('userId', '==', userId));

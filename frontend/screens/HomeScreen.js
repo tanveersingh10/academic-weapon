@@ -4,7 +4,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { signOut } from 'firebase/auth'
 import { auth, db } from '../firebase'
 import { doc, getDoc, query, where } from "firebase/firestore";
-import {getUserProfile} from '../utils/userProfile'
+import {getUserProfile} from '../utils/userProfile';
+import {Button} from 'react-native-paper';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -21,24 +22,6 @@ const HomeScreen = () => {
     })
   }, [])
     
-  //   const fetchData = async () => {
-  //     try {
-  //       const usersRef = doc(db, "profiles", userId);
-  //       const querySnapshot = await getDoc(usersRef);
-
-  //       if (querySnapshot.exists()) {
-  //         const data = querySnapshot.docs[0].data();
-  //         setName(data.name);
-  //       } else {
-  //         console.log('No user found!');
-  //       }
-  //     } catch (error) {
-  //       console.error('Error getting user:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -53,9 +36,9 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 20}}>Welcome {name}!</Text>
-      <TouchableOpacity onPress={handleSignOut} style={styles.button}>
-        <Text style={styles.buttonText}>Sign out</Text>
-      </TouchableOpacity>
+      <Button style={{marginTop:30}}onPress={handleSignOut} mode="contained">
+        Sign out
+      </Button>
 
     </View>
   );

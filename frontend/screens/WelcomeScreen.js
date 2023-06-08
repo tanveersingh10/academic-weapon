@@ -1,29 +1,32 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {Button, Text} from 'react-native-paper'
+import { useTheme } from 'react-native-paper';
 
 const WelcomeScreen = () => {
+
+    const theme = useTheme()
 
     const navigation = useNavigation()
     return (
         <KeyboardAvoidingView style={styles.container}> 
 
-
-            <Text>
-                Welcome to Academic Weapon!!
-            </Text>
+            <Text variant="headlineSmall">Welcome to Academic Weapon!</Text>   
             
 
             <View style={styles.buttonContainer}>
+                <View style={{width: "100%"}}>
+                  <Button onPress={() => navigation.navigate("Login")} mode="contained-tonal" compact={false} theme={theme}>
+                    Log In
+                  </Button>
 
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Login")}>
-                    <Text> Login </Text>
-                </TouchableOpacity>
+                  <Button style={{marginTop: 5}} onPress={() => navigation.navigate("Register")} mode="contained">
+                    <Text style={{color: "white"}}> Register </Text>
+                  </Button>
+              </View>
 
-                <TouchableOpacity style={[styles.button, styles.buttonOutline]} onPress={() => navigation.navigate("Register")}>
-                    <Text> Register </Text>
-                </TouchableOpacity>
-
+              
             </View>
         </KeyboardAvoidingView>
 

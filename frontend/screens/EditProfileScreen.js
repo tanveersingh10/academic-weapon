@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KeyboardAvoidingView, ScrollView, View, Button, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View,  Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { auth, db, profilesReference, storage  } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
@@ -10,6 +10,7 @@ import { doc, getDocs, query, where } from "firebase/firestore";
 import { pickImage, uploadImageToFirebase } from '../utils/imageUpload';
 import BackButton from '../components/BackButton';
 import { getUserProfile } from '../utils/userProfile';
+import {Text, Button, TextInput, RadioButton} from 'react-native-paper';
 
 const EditProfileScreen = () => {
 
@@ -94,22 +95,23 @@ const EditProfileScreen = () => {
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <BackButton/>
 
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1, justiifyContent:'center'}}>
                 
-                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30}}>Edit your profile!</Text>
+                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30, alignSelf: 'center'}}>Edit your profile!</Text>
                 
                 <TextInput
+                    dense={true}
                     style={styles.input}
                     placeholder="Name"
                     value={name}
                     onChangeText={setName}
                 />
 
-                <Picker
-                    selectedValue={course}
-                    style={{width: 200, marginBottom: 20}}
+                <Picker 
+                    selectedValue={school}
+                    style={{ padding: 0, justiifyContent: 'center', width: 200, marginBottom: 20, alignSelf: 'center'}}
                     onValueChange={(itemValue, itemIndex) =>
-                        setCourse(itemValue)
+                        setSchool(itemValue)
                     }>
                     <Picker.Item label="NUS" value="nus" />
                     <Picker.Item label="NTU" value="ntu" />
@@ -119,10 +121,10 @@ const EditProfileScreen = () => {
                     <Picker.Item label="SIM" value="sim" />
                 </Picker> 
 
-                <Text>Choose your course!</Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}>Choose your course!</Text>
                 <Picker
                     selectedValue={course}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf: 'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setCourse(itemValue)
                     }>
@@ -135,10 +137,10 @@ const EditProfileScreen = () => {
                     <Picker.Item label="Medicine" value="Medicine" />
                 </Picker> 
 
-                <Text> Year of study </Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}> Year of study </Text>
                 <Picker
                     selectedValue={yearOfStudy}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf: 'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setYearOfStudy(itemValue)
                     }>
@@ -149,10 +151,10 @@ const EditProfileScreen = () => {
                     <Picker.Item label="Post-grad" value ="postgrad" />
                 </Picker>
 
-                <Text> Gender </Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}> Gender </Text>
                 <Picker
                     selectedValue={gender}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf: 'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setGender(itemValue)
                     }>
@@ -160,17 +162,19 @@ const EditProfileScreen = () => {
                     <Picker.Item label="Female" value="female" />
                 </Picker> 
 
-                <Text> What modules are you taking this semester?</Text>
-                <Text> Enter the module codes separated by commas! </Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}> What modules are you taking this semester?</Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}> Enter the module codes separated by commas! </Text>
                 <TextInput
+                    dense={true}
                     style={styles.input}
                     placeholder="E.g. CS2030S, CS2040S"
                     value={modules.join(', ')}
                     onChangeText={handleModuleInputChange}
                 />
 
-                <Text> Tell other students about your interests and hobbies!</Text>
+                <Text variant="labelLarge" style={{alignSelf: 'center'}}> Tell other students about your interests and hobbies!</Text>
                 <TextInput 
+                    dense={true}
                     style={styles.bioInput}
                     placeholder="Enter Your Bio Here"
                     value={bio}
@@ -181,7 +185,7 @@ const EditProfileScreen = () => {
                 <Text>Where do you prefer to study?</Text>
                 <Picker
                     selectedValue={studySpot}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf: 'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setStudySpot(itemValue)
                     }>
@@ -193,7 +197,7 @@ const EditProfileScreen = () => {
                     
                 </Picker> 
 
-                <Text>Upload a picture of yourself if you'd like!</Text>
+                <Text variant='labelLarge' style={{alignSelf: 'center'}}>Upload a picture of yourself if you'd like!</Text>
 
                 <Button title="Pick an image from camera roll" onPress={async () => {
                     const uri = await pickImage();
@@ -202,13 +206,11 @@ const EditProfileScreen = () => {
                         setImageChanged(true);
                     }
             }} />
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, alignSelf:'center'}} />}
 
-                <TouchableOpacity onPress={handleEditProfile} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonText}> 
+                <Button onPress={handleEditProfile} mode="contained" style={{marginTop:20}}>  
                         I'm ready!
-                    </Text>
-                </TouchableOpacity>
+                </Button>
                 
             </ScrollView>
             

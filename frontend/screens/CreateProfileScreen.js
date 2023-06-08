@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, View, Button, TextInput, Image, StyleSheet, Text, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { SafeAreaView, ScrollView, View, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { auth, db, profilesReference, storage  } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 import { addDoc } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
-import BackButton from '../components/BackButton';
-import {uploadImageToFirebase, pickImage} from '../utils/imageUpload'
+import {BackButton} from '../components';
+import {uploadImageToFirebase, pickImage} from '../utils/imageUpload';
+import {Text, Button, TextInput} from 'react-native-paper';
 
 const CreateProfileScreen = () => {
 
@@ -22,59 +23,6 @@ const CreateProfileScreen = () => {
     const [image, setImage] = useState(null);
     
     const userId = auth.currentUser.uid;
-
-    // const uploadImageToFirebase = async (uri) => {
-    //     try {
-    //         const blob = await (await fetch(uri)).blob();
-    //         const filename = new Date().getTime().toString();
-    //         const imageRef = ref(storage, `images/${filename}`);
-    //         const uploadTask = uploadBytesResumable(imageRef, blob);
-            
-    //         return new Promise((resolve, reject) => {
-    //             uploadTask.on('state_changed', 
-    //                 (snapshot) => {
-    //                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //                     console.log('Upload is ' + progress + '% done');
-    //                 }, 
-    //                 (error) => {
-    //                     console.log(error);
-    //                     reject(error);
-    //                 }, 
-    //                 () => {
-    //                     getDownloadURL(uploadTask.snapshot.ref)
-    //                     .then((downloadURL) => {
-    //                         console.log('File available at', downloadURL);
-    //                         resolve(downloadURL);
-    //                     });
-    //                 }
-    //             );
-    //         });
-
-    //     } catch (e) {
-    //         console.error(e);
-    //         return null;
-    //     }
-    // };
-
-    
-
-    
-    // const pickImage = async () => {
-    //     // No permissions request is necessary for launching the image library
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //       mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //       allowsEditing: true,
-    //       aspect: [4, 3],
-    //       quality: 1,
-    //     });
-    
-    //     console.log(result);
-    
-    //     if (!result.canceled) {
-    //       setImage(result.assets[0].uri);
-    //     }
-    // };
-
 
     const navigation = useNavigation()
 
@@ -130,9 +78,10 @@ const CreateProfileScreen = () => {
             <ScrollView style={{ flex: 1 }}>
                 <BackButton />
 
-                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30}}>Create your profile!</Text>
+                <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30, alignSelf: 'center'}}>Create your profile!</Text>
                 
                 <TextInput
+                    dense={true}
                     style={styles.input}
                     placeholder="Name"
                     value={name}
@@ -141,7 +90,7 @@ const CreateProfileScreen = () => {
 
                 <Picker
                     selectedValue={course}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setCourse(itemValue)
                     }>
@@ -153,10 +102,10 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="SIM" value="sim" />
                 </Picker> 
 
-                <Text>Choose your Course!</Text>
+                <Text variant='labelLarge' style={{alignSelf: 'center'}}>Choose your Course!</Text>
                 <Picker
                     selectedValue={course}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setCourse(itemValue)
                     }>
@@ -169,10 +118,10 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="Medicine" value="Medicine" />
                 </Picker> 
 
-                <Text> Year of study </Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}> Year of study </Text>
                 <Picker
                     selectedValue={yearOfStudy}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setYearOfStudy(itemValue)
                     }>
@@ -183,10 +132,10 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="Post-grad" value ="postgrad" />
                 </Picker>
 
-                <Text> Gender </Text>
+                <Text variant='labelLarge' style={{alignSelf: 'center'}}> Gender </Text>
                 <Picker
                     selectedValue={gender}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setGender(itemValue)
                     }>
@@ -194,17 +143,19 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="Female" value="female" />
                 </Picker> 
 
-                <Text> What modules are you taking this semester?</Text>
-                <Text> Enter the module codes separated by commas! </Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}> What modules are you taking this semester?</Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}> Enter the module codes separated by commas! </Text>
                 <TextInput
+                    dense={true}
                     style={styles.input}
                     placeholder="E.g. CS2030S, CS2040S"
                     value={modules.join(', ')}
                     onChangeText={handleModuleInputChange}
                 />
 
-                <Text> Tell other students about your interests and hobbies!</Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}> Tell other students about your interests and hobbies!</Text>
                 <TextInput 
+                    dense={true}
                     style={styles.bioInput}
                     placeholder="Enter Your Bio Here"
                     value={bio}
@@ -212,10 +163,10 @@ const CreateProfileScreen = () => {
                     onChangeText={setBio}
                 />
 
-                <Text>Where do you prefer to study?</Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}>Where do you prefer to study?</Text>
                 <Picker
                     selectedValue={studySpot}
-                    style={{width: 200, marginBottom: 20}}
+                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
                         setStudySpot(itemValue)
                     }>
@@ -227,16 +178,14 @@ const CreateProfileScreen = () => {
                     
                 </Picker> 
 
-                <Text>Upload a picture of yourself if you'd like!</Text>
+                <Text variant='labelLarge' style={{alignSelf:'center'}}>Upload a picture of yourself if you'd like!</Text>
 
                 <Button title="Pick an image from camera roll" onPress={pickImage} />
-                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, alignSelf:'center'}} />}
 
-                <TouchableOpacity onPress={handleCreateProfile} style={[styles.button, styles.buttonOutline]}>
-                    <Text style={styles.buttonText}> 
+                <Button onPress={handleCreateProfile}>
                         I'm ready!
-                    </Text>
-                </TouchableOpacity>
+                </Button>
                 
           
             </ScrollView>

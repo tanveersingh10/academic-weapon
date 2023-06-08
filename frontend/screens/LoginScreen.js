@@ -1,10 +1,11 @@
-import { SafeAreaView, Alert, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, Alert, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { auth, db, profilesReference } from '../firebase';
 import { signInWithEmailAndPassword, onAuthStateChanged, getAuth, } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import { doc, getDocs, query, where } from "firebase/firestore";
-import BackButton from '../components/BackButton';
+import {BackButton} from '../components';
+import {Button, Text, TextInput} from 'react-native-paper';
 
 const LoginScreen = () => {
 
@@ -61,16 +62,20 @@ const LoginScreen = () => {
     
       <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-        <BackButton navigation={navigation}/> 
+        <BackButton  navigation={navigation}/> 
+
+        <Text variant="headlineSmall"> Log In </Text>
           
           <View style={styles.inputContainer}>
-              <TextInput 
+              <TextInput
+              dense={true}
               placeholder="Email"     
               value={email}
               onChangeText={text => setEmail(text)}
               style = {styles.input}
               /> 
               <TextInput 
+              dense={true}
               placeholder="Password" 
               value = {password}
               onChangeText={text => setPassword(text)}
@@ -80,32 +85,21 @@ const LoginScreen = () => {
 
           </View>
 
-          <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={handleLogin} style={styles.button}>
-                  <Text > 
+          <View >
+              <Button onPress={handleLogin} style={{marginTop:20}}mode="contained-tonal" dense={false}>
                       Log in
-                  </Text>
-              </TouchableOpacity>
+              </Button>
 
-              <TouchableOpacity onPress={() => navigation.navigate("ResetPassword")} style={[styles.button, styles.buttonOutline]}>
-                  <Text style={styles.buttonText}> 
+              <Button onPress={() => navigation.navigate("ResetPassword")} style={{marginTop:5}} mode="contained-tonal">
                       Forgot Password?
-                  </Text>
-              </TouchableOpacity>
+              </Button>
 
-              <TouchableOpacity onPress={() => navigation.navigate("Register")} style={[styles.button, styles.buttonOutline]}>
-                  <Text style={styles.buttonText}> 
+              <Button onPress={() => navigation.navigate("Register")} style={{marginTop:5}} mode="contained">
                       Don't have an account? Sign up!
-                  </Text>
-              </TouchableOpacity>
+              </Button>
 
           </View>
 
-          <View style={styles.bottomButtonContainer}>
-              <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
-                  <Text style={styles.buttonText}> Back </Text>
-              </TouchableOpacity>
-          </View>
       </KeyboardAvoidingView>
       
   )
@@ -120,7 +114,8 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     inputContainer: {
-      width: '80%'
+      width: '80%',
+      marginTop: 20
     },
     input: {
       backgroundColor: 'white',

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, KeyboardAvoidingView, ScrollView, View, Button, TextInput, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView, KeyboardAvoidingView, ScrollView, View, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { auth, db, profilesReference, storage  } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
@@ -10,6 +10,7 @@ import { doc, getDocs, query, where } from "firebase/firestore";
 import { pickImage, uploadImageToFirebase } from '../utils/imageUpload';
 import BackButton from '../components/BackButton';
 import { getUserProfile } from '../utils/userProfile';
+import { Avatar, Divider, Text, Button} from 'react-native-paper';
 
 const ViewProfileScreen = () => {
     const [name, setName] = useState('');
@@ -48,29 +49,42 @@ const ViewProfileScreen = () => {
     <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <BackButton />
         <ScrollView>
-            <View style={{marginTop: 30, marginBottom: 25}}>
-
-                <Image source={{uri: image}} style={{ width: 200, height: 200, borderRadius: 100  }}/>
-        
-
-            </View>
+        <View  style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            
             <View>
-                <Text style={{fontSize:30, textAlign: 'center'}}> {name} </Text>
-            </View>
+                <Avatar.Image style={{marginTop: 40, marginBottom:30}} source={{uri: image}} size={200} />
+            </View >
 
-            <View> 
-                <Text style={styles.words}>{school}</Text>
-                <Text style={styles.words}>Year {yearOfStudy}</Text>
+        
+            <Text>
+                <Text style={{fontSize:30, textAlign: 'center'}}> {name} ({gender[0]?.toUpperCase()})</Text>
+            </Text>
+            
+            <Divider />
+
+           
+
+            <View style={styles.infoContainer}>
+                <Text style={styles.words}>{school?.toUpperCase()}</Text>
+                <Divider style={styles.divider} />
+                <Text>Year {yearOfStudy}</Text>
+                <Divider style={styles.divider} />
                 <Text style={styles.words}>{course}</Text>
             </View>
 
-            <View> 
+            <Divider />
+
+            <Text style={{marginTop:5}}> Modules taking: {modules.map(x => x + ", ")}</Text>
+         
+            <Divider />
+            <View style={{marginTop:10}}> 
                 <Text style={styles.words}>{bio}</Text>
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate('EditProfileScreen')} style={styles.button}>
-                <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
+            <Button onPress={() => navigation.navigate('EditProfileScreen')} mode="contained" style={{marginBottom:20, marginTop: 30}}>
+                Edit Profile
+            </Button>
+        </View>
 
         </ScrollView>
     </SafeAreaView>
@@ -108,7 +122,19 @@ const styles = StyleSheet.create({
         fontSize:15,
         justifyContent:'center',
         alignItems:'center',
-    },
+    }, infoContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10,
+        width: "60%"
+      }, divider: {
+        flex: 1,
+        height: StyleSheet.hairlineWidth,
+        marginHorizontal: 10,
+      },
+    
 
 
 })
