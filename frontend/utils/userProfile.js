@@ -14,4 +14,19 @@ const getUserProfile = async (userId) => {
     return userProfile;
 };
 
-module.exports = {getUserProfile}
+
+const getAllUsers = async (userId) => {
+    const q = query(profilesReference, where('userId', '!=', userId));
+    const querySnapshot = await getDocs(q);
+
+    profiles = []
+
+    querySnapshot.forEach((doc) => {
+        profiles.push(doc.data());
+    })
+
+    return profiles;
+}
+
+
+module.exports = {getUserProfile, getAllUsers}

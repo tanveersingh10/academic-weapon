@@ -1,9 +1,45 @@
 import { StyleSheet, View, SafeAreaView, ScrollView } from 'react-native'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import IndividualCard from '../components/Card'
 import {Text} from 'react-native-paper';
+import {getAllUsers} from '../utils/userProfile';
+import {auth} from '../firebase';
 
 const Dashboard = () => {
+
+  const [loading, setLoading] = useState(false);
+  const profilesArray = [];
+
+  useEffect(() => {
+    const userId = auth.currentUser.uid;
+    setLoading(true);
+    const fetchProfiles = async () => {
+        setLoading(true);
+        try {
+            const profilesArray = await getAllUsers(userId);
+        } catch(error) {
+            alert(error);
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    fetchProfiles()
+  }, []);
+
+
+  const RenderCards = ({array}) => {
+    if (array?.length > 0) {
+      return array.map(user => <IndividualCard name={user.name} gender={user.gender} course={user.course} bio={user.bio}
+        modules={user.modules} school={user.school} yearOfStudy={user.yearOfStudy} studySpot={user.studySpot} image={user.image} /> )
+    } else {
+      return <Text>No users found</Text>
+    }
+  }
+
+
+
   return (
     <SafeAreaView style={{flex: 1}}>
         <ScrollView>
@@ -11,9 +47,14 @@ const Dashboard = () => {
             <Text variant="headlineSmall" style={{marginTop:20, alignSelf:'center'}}>
                 Find Your Study Buddy today!
             </Text>
+
+            {loading ? (
+              <Text> Loading</Text>
+            ) : (
+              <RenderCards array={profilesArray}/>
+            )}
         
-            <IndividualCard name="Tanveer" gender="Male" course="Computing" bio="I love coding and going to the gym!"
-                modules={["CS1101S", "CS1231S"]} school="nus" yearOfStudy="2" studySpot="library" image="https://firebasestorage.googleapis.com/v0/b/academic-weapon.appspot.com/o/images%2F1685592485030?alt=media&token=7adc9d98-d154-4036-ac30-aa2244d59707"/>
+            
         </ScrollView>
     </SafeAreaView>
   )
