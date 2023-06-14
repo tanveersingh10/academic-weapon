@@ -42,11 +42,11 @@ const HomeScreen = () => {
           setProfilesArray(filteredProfiles);
 
       } else {
-          setProfilesArray(allProfiles);
+          setProfilesArray(profiles);
       }    
     } catch(error) {
         alert(error);
-        console.log(error);
+    
     } finally { 
         setLoading(false);
     }

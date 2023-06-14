@@ -1,4 +1,4 @@
-import ChatScreen from "./ChatScreen";
+
 import CreateProfileScreen from "./CreateProfileScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import HomeScreen from "./HomeScreen";
@@ -11,6 +11,7 @@ import VerificationScreen from "./VerificationScreen";
 import ViewProfileScreen from "./ViewProfileScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import Dashboard from "./Dashboard";
+import ChatScreen from "./ChatScreen";
 
 export  {
     ChatScreen,
@@ -25,5 +26,5 @@ export  {
     VerificationScreen,
     ViewProfileScreen,
     WelcomeScreen,
-    Dashboard
+    Dashboard,
 };

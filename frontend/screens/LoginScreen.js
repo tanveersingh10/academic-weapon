@@ -25,7 +25,6 @@ const LoginScreen = () => {
                 try {
                   const q = query(profilesReference, where("userId", "==", userId));
                   const querySnapshot = await getDocs(q);
-                  console.log(querySnapshot)
                   if (querySnapshot.docs.length > 0) {
                     navigation.navigate("BottomNavigator")
                   } else {

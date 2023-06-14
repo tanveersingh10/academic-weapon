@@ -30,8 +30,6 @@ const profilesReference = collection(db, 'profiles');
 const storage = getStorage()
 
 
-
-
 const auth = getAuth(app);
 
 export { auth, db, profilesReference, storage};

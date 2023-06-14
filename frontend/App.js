@@ -49,6 +49,9 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="CreateProfile" component={CreateProfileScreen} />
         <Stack.Screen options={{ headerShown: false }} name="BottomNavigator" component={BottomNavigator} />
         <Stack.Screen options={{ headerShown: false }} name="EditProfileScreen" component={EditProfileScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Chat" component={ChatScreen} />
+
+
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>

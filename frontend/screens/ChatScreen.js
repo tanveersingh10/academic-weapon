@@ -4,21 +4,27 @@ import { auth, db, profilesReference, storage  } from '../firebase';
 import { doc, getDocs, query, where } from "firebase/firestore";
 import { StyleSheet, SafeAreaView, StatusBar, ScrollView, FlatList, View, Text, TouchableOpacity, Image } from 'react-native';
 import { Avatar, Divider, Button} from 'react-native-paper';
+import {getAllUsers}from '../utils/userProfile';
 
-const userId = auth.currentUser.uid;
+
 const ChatScreen = () => {
+  const userId = auth.currentUser.uid;
   const [users, setUsers] = useState(null)
   
-  const getUsers = async ()=> {
-  const querySanp = query(profilesReference, where('userId', '!=', userId));
-  const allUsers = await getDocs(querySanp);
-  const final = allUsers.docs.map(docSnap=>docSnap.data())
-  setUsers(final)
-}
-
-useEffect(()=>{
-  getUsers()
-},[])
+  
+  useEffect(() => {
+    async function fetchData(userId) {
+      try {
+        const users = await getAllUsers(userId);
+        setUsers(users);
+      } catch (e) {
+        alert(e);
+        console.log(e);
+      }
+    }
+    
+    fetchData(userId);
+  }, []);
 
 return (
     <SafeAreaView >
@@ -26,19 +32,18 @@ return (
       <View>
               <FlatList
                   data={users}
-                  keyExtractor={(item)=>item.uid}
-                  renderItem={({item}) => (
-                  <TouchableOpacity 
-                  key = {item.uid}
-                  onPress={() => navigation.navigate('Chats', {name: item.name, uid: item.uid})} >
+                  keyExtractor={(item, index) => item.uid || String(index)}
+                  renderItem={({item, index}) => (
+                    <TouchableOpacity 
+                    onPress={() => navigation.navigate('Chats', {name: item.name, uid: item.uid})} >
                       <View style={styles.card} >
-                          <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
-                        <View style={styles.textArea}>
-                      <Text style={styles.nameText} >{item.name}</Text>
-                      <Text style={styles.msgContent} >{item.email}</Text>
+                            <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
+                      <View style={styles.textArea}>
+                        <Text style={styles.nameText} >{item.name}</Text>
+                        <Text style={styles.msgContent} >{item.email}</Text>
+                        </View>
                       </View>
-                      </View>
-                      </TouchableOpacity>
+                    </TouchableOpacity>
                   )}
                   />
           </View>
