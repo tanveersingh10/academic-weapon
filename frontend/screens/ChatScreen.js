@@ -8,6 +8,7 @@ import {getAllUsers}from '../utils/userProfile';
 
 
 const ChatScreen = () => {
+  const navigation = useNavigation()
   const userId = auth.currentUser.uid;
   const [users, setUsers] = useState(null)
   
@@ -33,7 +34,7 @@ return (
               <FlatList
                   data={users}
                   keyExtractor={(item, index) => item.uid || String(index)}
-                  renderItem={({item, index}) => (
+                  renderItem={({item}) => (
                     <TouchableOpacity 
                     onPress={() => navigation.navigate('Chats', {name: item.name, uid: item.uid})} >
                       <View style={styles.card} >
