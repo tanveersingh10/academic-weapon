@@ -27,7 +27,7 @@ const LoginScreen = () => {
                   const querySnapshot = await getDocs(q);
                   console.log(querySnapshot)
                   if (querySnapshot.docs.length > 0) {
-                    navigation.navigate("HomeScreen")
+                    navigation.navigate("BottomNavigator")
                   } else {
                     console.log("Logged in with " + user.email)
                     navigation.navigate("CreateProfile");
