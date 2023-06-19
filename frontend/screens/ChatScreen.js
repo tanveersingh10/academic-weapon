@@ -36,12 +36,12 @@ return (
                   keyExtractor={(item, index) => item.uid || String(index)}
                   renderItem={({item}) => (
                     <TouchableOpacity 
-                    onPress={() => navigation.navigate('Chats', {name: item.name, uid: item.uid})} >
+                    onPress={() => navigation.navigate('Chats', {uid: item.userId, name: item.name, image: item.image})} >
                       <View style={styles.card} >
                             <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
                       <View style={styles.textArea}>
                         <Text style={styles.nameText} >{item.name}</Text>
-                        <Text style={styles.msgContent} >{item.email}</Text>
+                        <Text style={styles.msgContent} >{item.bio}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
