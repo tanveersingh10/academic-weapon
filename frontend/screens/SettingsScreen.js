@@ -1,17 +1,35 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView} from 'react-native';
 import { Text, Button} from 'react-native-paper';
+import {signOut } from "firebase/auth";
 import { auth } from '../firebase';
+
 
 const SettingsScreen = () => {
 
+    navigation = useNavigation()
+
+    const handleSignOut = () => {
+      signOut(auth)
+      .then(() => {
+        navigation.navigate("Login");
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+
     return (
-        <View style={styles.container}> 
+        <SafeAreaView style={styles.container}> 
             <Text style = {styles.words}>
                 Settings
             </Text>
-        </View>      
+
+            <Button onClick={handleSignOut} mode="contained" style={{marginTop: "auto", marginBottom: 20}}> 
+              Sign Out
+            </Button>
+
+        </SafeAreaView>      
     )
 }
 
