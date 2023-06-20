@@ -5,5 +5,5 @@ import Card from "./Card";
 export {
     BackButton,
     BottomNavigator,
-    Card
+    Card,
 }

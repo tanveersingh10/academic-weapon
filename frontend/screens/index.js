@@ -12,6 +12,8 @@ import ViewProfileScreen from "./ViewProfileScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import Dashboard from "./Dashboard";
 import ChatScreen from "./ChatScreen";
+import Chats from "./Chats";
+import ViewFriendScreen from "./ViewFriendScreen";
 
 export  {
     ChatScreen,
@@ -27,4 +29,6 @@ export  {
     ViewProfileScreen,
     WelcomeScreen,
     Dashboard,
+    Chats,
+    ViewFriendScreen
 };

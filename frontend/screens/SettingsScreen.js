@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Text, Button} from 'react-native-paper';
+import { auth } from '../firebase';
 
 const SettingsScreen = () => {
 

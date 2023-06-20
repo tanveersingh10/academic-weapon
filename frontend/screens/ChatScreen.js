@@ -8,6 +8,7 @@ import {getAllUsers}from '../utils/userProfile';
 
 
 const ChatScreen = () => {
+  const navigation = useNavigation()
   const userId = auth.currentUser.uid;
   const [users, setUsers] = useState(null)
   
@@ -33,14 +34,14 @@ return (
               <FlatList
                   data={users}
                   keyExtractor={(item, index) => item.uid || String(index)}
-                  renderItem={({item, index}) => (
+                  renderItem={({item}) => (
                     <TouchableOpacity 
-                    onPress={() => navigation.navigate('Chats', {name: item.name, uid: item.uid})} >
+                    onPress={() => navigation.navigate('Chats', {uid: item.userId, name: item.name, image: item.image})} >
                       <View style={styles.card} >
                             <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
                       <View style={styles.textArea}>
                         <Text style={styles.nameText} >{item.name}</Text>
-                        <Text style={styles.msgContent} >{item.email}</Text>
+                        <Text style={styles.msgContent} >{item.bio}</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -84,9 +85,10 @@ userImage: {
   paddingBottom: 15,
 },
 userImageST: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
+  width: 60,
+  height: 60,
+  borderRadius: 30,
+  
 }, 
 textArea: {
   flexDirection: 'column',

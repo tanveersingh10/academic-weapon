@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { LoginScreen, HomeScreen, RegisterScreen, WelcomeScreen, VerificationScreen, ResetPasswordScreen, PasswordResettedScreen, CreateProfileScreen,
-    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen, Dashboard} from './screens';
+    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen, Dashboard, Chats, ViewFriendScreen} from './screens';
 import  { BottomNavigator } from './components';
 import { MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
 import theme from './components/theme';
@@ -49,8 +49,13 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="CreateProfile" component={CreateProfileScreen} />
         <Stack.Screen options={{ headerShown: false }} name="BottomNavigator" component={BottomNavigator} />
         <Stack.Screen options={{ headerShown: false }} name="EditProfileScreen" component={EditProfileScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Chat" component={ChatScreen} />
-
+        <Stack.Screen
+            name="Chats"
+            component={Chats}
+            options={({ route }) => ({
+              title: route.params.name
+            })}/>
+        <Stack.Screen options={{ headerShown: false }} name="ViewFriendScreen" component={ViewFriendScreen} />
 
       </Stack.Navigator>
     </NavigationContainer>
