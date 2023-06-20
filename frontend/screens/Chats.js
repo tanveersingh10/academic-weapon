@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
-import { View } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat'
 import { auth, db } from '../firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
@@ -8,13 +8,12 @@ import { addDoc, collection, onSnapshot, orderBy, query, doc, where, serverTimes
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 
-const Chats = ({route, navigation}) => {
+const Chats = ({route}) => {
   
+  const navigation = useNavigation()
   const {uid, name, image} = route.params
   const userId = auth.currentUser.uid
   const [messages, setMessages] = useState([])
-  const recipient = getUserProfile(uid)
-  
 
   useEffect(() => {
     setMessages([
@@ -34,7 +33,7 @@ const Chats = ({route, navigation}) => {
 
   const getAllMessages = async () => {
     const chatsRef = collection(db, 'Chats');
-    const q = query(chatsRef, where("sentBy", "==", userId), where("sentTo", "==", uid), orderBy('createdAt', 'desc'));
+    const q = query(chatsRef, where("sentBy", "in", [uid, userId]), where("sentTo", "in", [uid, userId]), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const allTheMsgs = snapshot.docs
         .map(docSanp => {
@@ -57,15 +56,17 @@ const Chats = ({route, navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <View style={{marginRight: 10}}>
+            <TouchableOpacity onPress={() => navigation.navigate('ViewFriendScreen', {uid: uid})}>
             <Avatar.Image
               rounded
               source={{uri: image}}
               size = {40}
             />
+            </TouchableOpacity>
         </View>
       )
     })
-  }, []);
+  }, [navigation, image, uid]);
 
 
   const onSend = (msgArray) => {
@@ -104,12 +105,18 @@ const Chats = ({route, navigation}) => {
         wrapperStyle={{
             right: {
                 backgroundColor: '#2e64e5'
-            }
+            },
+            left: {
+              backgroundColor: '#2e64e5'
+          }
         }}
         textStyle={{
             right: {
                 color: '#fff'
-            }
+            },
+            left: {
+              color: '#fff'
+          }
         }}
     />)
   }
