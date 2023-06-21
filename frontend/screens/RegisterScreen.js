@@ -21,11 +21,18 @@ const RegisterScreen = () => {
         }
 
         //regex for e*******@u.nus.edu
-        const emailPattern = /^[eE][0-9]{7}@u\.nus\.edu$/; 
+        const nusPattern = /^.*@u\.nus\.edu$/;
+        const smuPattern = /\b[A-Za-z0-9._%+-]+@.*smu.*\..*\b/i;
+        const ntuPattern = /\b[A-Za-z0-9._%+-]+@.*ntu.*\..*\b/i;
+        const simPattern = /\b[A-Za-z0-9._%+-]+@.*sim.*\..*\b/i;
+        const sutdPattern = /\b[A-Za-z0-9._%+-]+@.*sutd.*\..*\b/i;
+        const sussPattern = /\b[A-Za-z0-9._%+-]+@.*suss.*\..*\b/i;
+
     
         // Check if email matches the pattern
-        if (!emailPattern.test(email)) {
-            alert("Please use a valid NUS email address.");
+        if (!nusPattern.test(email) && !smuPattern.test(email) && !ntuPattern.test(email) 
+          && !simPattern.test(email) && !sutdPattern.test(email) && !sussPattern.test(email)) {
+            alert("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM");
             return;
         }
 

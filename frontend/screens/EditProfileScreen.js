@@ -128,13 +128,18 @@ const EditProfileScreen = () => {
                     onValueChange={(itemValue, itemIndex) =>
                         setCourse(itemValue)
                     }>
-                    <Picker.Item label="Business" value="Business" />
-                    <Picker.Item label="Computing" value="Computing" />
-                    <Picker.Item label="Dentistry" value="Dentistry" />
-                    <Picker.Item label="Engineering" value="Engineering" />
-                    <Picker.Item label="FASS" value="FASS" />
-                    <Picker.Item label="Law" value="Law" />
-                    <Picker.Item label="Medicine" value="Medicine" />
+                        <Picker.Item label="Architecture" value="architecture" />
+                        <Picker.Item label="Arts" value="arts" />
+                        <Picker.Item label="Business" value="business" />
+                        <Picker.Item label="Computing" value="computing" />
+                        <Picker.Item label="Dentistry" value="dentistry" />
+                        <Picker.Item label="Education" value="education" />
+                        <Picker.Item label="Healthcare" value="healthcare" />
+                        <Picker.Item label="Law" value="law" />
+                        <Picker.Item label="Math" value="math" />
+                        <Picker.Item label="Medicine" value="medicine" />
+                        <Picker.Item label="Science" value="science" />
+                        <Picker.Item label="Others" value="others" />
                 </Picker> 
 
                 <Text variant="labelLarge" style={{alignSelf: 'center'}}> Year of study </Text>
