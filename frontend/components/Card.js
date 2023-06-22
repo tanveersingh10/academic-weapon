@@ -1,11 +1,14 @@
 import { StyleSheet, View, SafeAreaView } from 'react-native'
 import React from 'react';
 import { Card, Text, Avatar, Button, useTheme, Divider,} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 
 
-const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image }) => {
+const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image, uid }) => {
     const theme = useTheme()
+    const navigation = useNavigation()
+    console.log(uid)
 
   return (
     <SafeAreaView>
@@ -25,7 +28,7 @@ const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, stu
                 <Button onPress={() => {}} mode="contained">
                     View Profile
                 </Button>
-                <Button onPress={() => {}} mode="contained-tonal">
+                <Button onPress={() => navigation.navigate('Chats', {uid: uid, name: name, image: image})} mode="contained-tonal">
                     Message
                 </Button>
             </Card.Actions>
