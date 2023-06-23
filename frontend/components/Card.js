@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 
 
 
-const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image, uid }) => {
+const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image, uid}) => {
     const theme = useTheme()
     const navigation = useNavigation()
-    console.log(uid)
+    
 
   return (
     <SafeAreaView>

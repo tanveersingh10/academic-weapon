@@ -62,7 +62,7 @@ const HomeScreen = () => {
   const RenderCards = ({array}) => {
     if (array?.length > 0) {
       return array.map((user, index) => <IndividualCard key={user.id || index} name={user.name} gender={user.gender} course={user.course} bio={user.bio}
-        modules={user.modules} school={user.school} yearOfStudy={user.yearOfStudy} studySpot={user.studySpot} image={user.image} /> )
+        modules={user.modules} school={user.school} yearOfStudy={user.yearOfStudy} studySpot={user.studySpot} image={user.image} uid={user.userId}/> )
     } else {
       return <Text>No users found</Text>
     }
