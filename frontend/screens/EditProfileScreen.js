@@ -210,7 +210,9 @@ const EditProfileScreen = () => {
                         setImage(uri);
                         setImageChanged(true);
                     }
-            }} />
+            }}>
+                Pick an Image from your camera roll
+                </Button>
                 {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, alignSelf:'center'}} />}
 
                 <Button onPress={handleEditProfile} mode="contained" style={{marginTop:20}}>  

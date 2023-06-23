@@ -25,7 +25,7 @@ const SettingsScreen = () => {
                 Settings
             </Text>
 
-            <Button onClick={handleSignOut} mode="contained" style={{marginTop: "auto", marginBottom: 20}}> 
+            <Button onPress={handleSignOut} mode="contained" style={{marginTop: "auto", marginBottom: 20}}> 
               Sign Out
             </Button>
 

@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View, Image} from 'react-native';
 import {Button, Text} from 'react-native-paper'
 import { useTheme } from 'react-native-paper';
+import logo from '../assets/logo-transparent.png'; 
+
 
 const WelcomeScreen = () => {
 
@@ -12,7 +14,7 @@ const WelcomeScreen = () => {
     return (
         <KeyboardAvoidingView style={styles.container}> 
 
-            <Text variant="headlineSmall">Welcome to Academic Weapon!</Text>   
+            <Image source={logo} style={{width: 300, height: 300}}  />
             
 
             <View style={styles.buttonContainer}>
