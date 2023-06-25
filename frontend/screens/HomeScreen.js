@@ -149,6 +149,7 @@ const HomeScreen = () => {
                     selectedValue={selectedCourse}
                     onValueChange={handleCourseChange}
                   >
+                        <Picker.Item label="All" value="" />
                         <Picker.Item label="Architecture" value="architecture" />
                         <Picker.Item label="Arts" value="arts" />
                         <Picker.Item label="Business" value="business" />
