@@ -56,14 +56,14 @@ const CreateProfileScreen = () => {
             .then(() => {
                 console.log('Profile created successfully!');
                 // Reset the form after successful submission
-                setName('');
-                setSchool('');
-                setYearOfStudy('');
-                setCourse('');
-                setModules([]);
-                setGender('');
-                setStudySpot('');
-                setBio('');
+                // setName('');
+                // setSchool('');
+                // setYearOfStudy('');
+                // setCourse('');
+                // setModules([]);
+                // setGender('');
+                // setStudySpot('');
+                // setBio('');
                 navigation.navigate("HomeScreen")
             })
             .catch((error) => {
@@ -76,7 +76,9 @@ const CreateProfileScreen = () => {
     return (
         <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <ScrollView style={{ flex: 1 }}>
+ 
                 <BackButton />
+             
 
                 <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30, alignSelf: 'center'}}>Create your profile!</Text>
                 
@@ -89,10 +91,10 @@ const CreateProfileScreen = () => {
                 />
 
                 <Picker
-                    selectedValue={course}
+                    selectedValue={school}
                     style={{width: 200, marginBottom: 20, alignSelf:'center'}}
                     onValueChange={(itemValue, itemIndex) =>
-                        setCourse(itemValue)
+                        setSchool(itemValue)
                     }>
                     <Picker.Item label="NUS" value="nus" />
                     <Picker.Item label="NTU" value="ntu" />

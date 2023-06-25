@@ -15,7 +15,7 @@ const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, stu
         <Card  style={{margin: 20}} mode='outlined'>
             <Card.Cover source = {{url: image}} />
             <Card.Title titleStyle={{fontSize: 25, alignSelf: 'center'}} subtitleStyle={{color:theme.colors.primary, alignSelf:'center'}} 
-                title={name} subtitle={ " Year " + yearOfStudy + " " + course + " student from " + school }/>
+                title={name} subtitle={ " Year " + yearOfStudy + " " + course + " student from " + school.toUpperCase() }/>
             <Card.Content>
                 <Text variant="bodyLarge">{bio}</Text>
                 <Divider style={{marginBottom: 10}}/> 

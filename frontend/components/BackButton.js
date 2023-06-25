@@ -18,7 +18,7 @@ export default BackButton;
 const styles = StyleSheet.create({
     backButton: {
       position: 'absolute',
-      top: 20, 
+      top: 35, 
       left: 10
     }
   });

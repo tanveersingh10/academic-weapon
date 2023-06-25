@@ -101,13 +101,12 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text variant="headlineSmall" style={styles.headline}>
-            Find Your Study Buddy today!
+            Find your Study Buddy today!
         </Text>
 
         <Button title="Filter by school" onPress={() => setShowFilter(!showFilter)}> 
           Filter
         </Button>
-
 
             {showFilter && (  
                <Modal
@@ -236,6 +235,7 @@ const styles = StyleSheet.create({
   headline: {
     marginTop: 20,
     alignSelf: 'center',
+    textAlign: 'center'
   },
   closeButton: {
     position: 'absolute', 

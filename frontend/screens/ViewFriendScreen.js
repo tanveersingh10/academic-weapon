@@ -15,6 +15,7 @@ const ViewFriendScreen = ({route}) => {
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
 
+
     const {uid} = route.params
 
     useEffect(() => {
@@ -33,7 +34,7 @@ const ViewFriendScreen = ({route}) => {
             .catch((error) => {
                 console.error('Error getting profile:', error);
             });
-    }, []);
+    }, );
 
   return (
     <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

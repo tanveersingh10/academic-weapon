@@ -10,7 +10,7 @@ import { doc, getDocs, query, where } from "firebase/firestore";
 import { pickImage, uploadImageToFirebase } from '../utils/imageUpload';
 import BackButton from '../components/BackButton';
 import { getUserProfile } from '../utils/userProfile';
-import { Avatar, Divider, Text, Button} from 'react-native-paper';
+import { Avatar, Divider, Text, Button, ActivityIndicator} from 'react-native-paper';
 
 const ViewProfileScreen = () => {
     const [name, setName] = useState('');
@@ -22,32 +22,40 @@ const ViewProfileScreen = () => {
     const [studySpot, setStudySpot] = useState('');
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
+    const [refresh, setRefresh] = useState(false)
+    const [isRefeshing, setIsRefreshing] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     //const [imageChanged, setImageChanged] = useState(false);
 
     const userId = auth.currentUser.uid;
     const navigation = useNavigation();
 
+
     useEffect(() => {
-        getUserProfile(userId)
-            .then((userProfile) => {
-                setName(userProfile.name);
-                setSchool(userProfile.school);
-                setYearOfStudy(userProfile.yearOfStudy);
-                setCourse(userProfile.course);
-                setModules(userProfile.modules);
-                setGender(userProfile.gender);
-                setStudySpot(userProfile.studySpot);
-                setBio(userProfile.bio);
-                setImage(userProfile.image);
-            })
-            .catch((error) => {
-                console.error('Error getting profile:', error);
-            });
-    }, []);
+      setIsLoading(true);
+      getUserProfile(userId)
+          .then((userProfile) => {
+              setName(userProfile.name);
+              setSchool(userProfile.school);
+              setYearOfStudy(userProfile.yearOfStudy);
+              
+              setCourse(userProfile.course);
+              setModules(userProfile.modules);
+              setGender(userProfile.gender);
+              setStudySpot(userProfile.studySpot);
+              setBio(userProfile.bio);
+              setImage(userProfile.image);
+          })
+          .catch((error) => {
+              console.error('Error getting profile:', error);
+          })
+          .finally(() => {
+              setIsLoading(false);
+          });
+  }, [refresh]);
 
   return (
     <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <BackButton />
         <ScrollView>
         <View  style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             
@@ -61,15 +69,13 @@ const ViewProfileScreen = () => {
             </Text>
             
             <Divider />
-
-           
-
+          
             <View style={styles.infoContainer}>
                 <Text style={styles.words}>{school?.toUpperCase()}</Text>
                 <Divider style={styles.divider} />
                 <Text>Year {yearOfStudy}</Text>
                 <Divider style={styles.divider} />
-                <Text style={styles.words}>{course}</Text>
+                <Text style={styles.words}>{course.charAt(0).toUpperCase() + course.slice(1)}</Text>
             </View>
 
             <Divider />
@@ -77,13 +83,24 @@ const ViewProfileScreen = () => {
             <Text style={{marginTop:5}}> Modules taking: {modules.map(x => x + ", ")}</Text>
          
             <Divider />
-            <View style={{marginTop:10}}> 
+
+            <View style={{marginTop:10, marginHorizontal: 30}}> 
                 <Text style={styles.words}>{bio}</Text>
             </View>
 
-            <Button onPress={() => navigation.navigate('EditProfileScreen')} mode="contained" style={{marginBottom:20, marginTop: 30}}>
+            <Button onPress={() => navigation.navigate('EditProfileScreen')} mode="contained" style={{marginBottom:5, marginTop: 30, width:"50%"}}>
                 Edit Profile
             </Button>
+
+            {
+              isLoading ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+              ) : (
+                  <Button onPress={()=>setRefresh(!refresh)} style={{marginBottom:20, width: "30%"}}>
+                      Refresh
+                  </Button>
+              )
+            }
         </View>
 
         </ScrollView>

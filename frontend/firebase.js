@@ -12,7 +12,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBtbvdD9OUJ7l7ebejRqMKEDnK_bv0vbm0",
-  authDomain: "academic-weapon.firebaseapp.com",
+  authDomain: "academic-weapon.firebaseapp.com",  
   projectId: "academic-weapon",
   storageBucket: "academic-weapon.appspot.com",
   messagingSenderId: "400701336001",
@@ -26,10 +26,11 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 const profilesReference = collection(db, 'profiles');
+const chatsReference = collection(db, 'Chats')
 
 const storage = getStorage()
 
 
 const auth = getAuth(app);
 
-export { auth, db, profilesReference, storage};
+export { auth, db, profilesReference, storage, chatsReference};

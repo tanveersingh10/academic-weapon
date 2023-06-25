@@ -23,7 +23,7 @@ const WelcomeScreen = () => {
                     Log In
                   </Button>
 
-                  <Button style={{marginTop: 5}} onPress={() => navigation.navigate("Register")} mode="contained">
+                  <Button style={{marginTop: 10}} onPress={() => navigation.navigate("Register")} mode="contained">
                     <Text style={{color: "white"}}> Register </Text>
                   </Button>
               </View>

@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tanveersingh10.academicweapon"
     },
     "android": {
       "adaptiveIcon": {

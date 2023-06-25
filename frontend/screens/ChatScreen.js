@@ -3,50 +3,73 @@ import React, { useState, useEffect } from 'react';
 import { auth, db, profilesReference, storage  } from '../firebase';
 import { doc, getDocs, query, where } from "firebase/firestore";
 import { StyleSheet, SafeAreaView, StatusBar, ScrollView, FlatList, View, Text, TouchableOpacity, Image } from 'react-native';
-import { Avatar, Divider, Button} from 'react-native-paper';
-import {getAllUsers}from '../utils/userProfile';
+import { Avatar, Divider, Button, ActivityIndicator} from 'react-native-paper';
+import {getAllUsers, getUsersWithChatHistory}from '../utils/userProfile';
 
 
 const ChatScreen = () => {
   const navigation = useNavigation()
   const userId = auth.currentUser.uid;
   const [users, setUsers] = useState(null)
+  const [loading, setLoading] = useState(false)
   
   
   useEffect(() => {
+    setLoading(true);
     async function fetchData(userId) {
       try {
-        const users = await getAllUsers(userId);
+        let users = await getUsersWithChatHistory(userId);
         setUsers(users);
       } catch (e) {
         alert(e);
         console.log(e);
+      } finally {
+        setLoading(false);
       }
     }
     
     fetchData(userId);
   }, []);
 
+
+  
+  
+
 return (
     <SafeAreaView >
       <StatusBar />
       <View>
+
+        {loading ? (
+          <View style={styles.centered}>
+            <ActivityIndicator animating={true} />
+          </View>
+        ) : (
+          <View>
+            {users ? (
               <FlatList
-                  data={users}
-                  keyExtractor={(item, index) => item.uid || String(index)}
-                  renderItem={({item}) => (
-                    <TouchableOpacity 
-                    onPress={() => navigation.navigate('Chats', {uid: item.userId, name: item.name, image: item.image})} >
-                      <View style={styles.card} >
-                            <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
-                      <View style={styles.textArea}>
-                        <Text style={styles.nameText} >{item.name}</Text>
-                        <Text style={styles.msgContent} >{item.bio}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                  />
+              data={users}
+              keyExtractor={(item, index) => item.uid || String(index)}
+              renderItem={({item}) => (
+                <TouchableOpacity 
+                onPress={() => navigation.navigate('Chats', {uid: item.userId, name: item.name, image: item.image})} >
+                  <View style={styles.card} >
+                        <Avatar.Image style={styles.userImageST} source={{uri: item.image}}/>
+                  <View style={styles.textArea}>
+                    <Text style={styles.nameText} >{item.name}</Text>
+                    <Text style={styles.msgContent} >{item.bio}</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              )}
+              />
+            ) : 
+              <View style={styles.centered}>
+                <Text>You have no chats. Find a friend from the home screen!</Text>
+              </View>
+            }
+          </View>
+        )}          
           </View>
     </SafeAreaView>
   );
@@ -123,5 +146,9 @@ sectionDescription: {
 },
 highlight: {
   fontWeight: '700',
+}, centered: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
 },
 });

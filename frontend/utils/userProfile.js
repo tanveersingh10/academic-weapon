@@ -1,5 +1,5 @@
-import {  getDocs, query, where } from "firebase/firestore";
-import { profilesReference,   } from '../firebase';
+import {  getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import { chatsReference, profilesReference  } from '../firebase';
 
 const getUserProfile = async (userId) => {
     const q = query(profilesReference, where('userId', '==', userId));
@@ -64,6 +64,38 @@ const getFilteredUsers = async (userId, name, school, course, yearOfStudy, study
     return profiles;
 }
 
+const getUsersWithChatHistory = async (userId) => {
+    const sentQuery = query(chatsReference, where("sentBy", "==", userId));
+    const receivedQuery = query(chatsReference, where("sentTo", "==", userId));
+
+    const [sentSnapshot, receivedSnapshot] = await Promise.all([getDocs(sentQuery), getDocs(receivedQuery)]);
+
+    const sentDocs = sentSnapshot.docs.map(doc => doc.data())
+  
+    const receivedDocs = receivedSnapshot.docs.map(doc => doc.data());
+
+    const chatHistory = [...sentDocs, ...receivedDocs];
+   
+
+    const userIdsInChatHistory = chatHistory.map(chat => chat.sentBy === userId ? chat.sentTo : chat.sentBy);
+    
+    const uniqueUserIdsInChatHistory = [...new Set(userIdsInChatHistory)]; // Removes duplicates
+    
+    let arr = Array.from(uniqueUserIdsInChatHistory)
+    //console.log(arr[0])
+
+    let profiles = [];
+
+    for (let i = 0; i < arr.length; i++) {
+        const q = query(profilesReference, where('userId', '==', arr[i]));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(x => profiles.push(x.data()))
+    }
+
+    console.log(profiles[0])
+
+    return profiles;
+}
 
 
-module.exports = {getUserProfile, getAllUsers, getFilteredUsers}
+module.exports = {getUserProfile, getAllUsers, getFilteredUsers, getUsersWithChatHistory}

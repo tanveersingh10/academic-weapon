@@ -18,11 +18,11 @@ const BottomNavigator = () => {
               iconName = focused
                 ? 'ios-home'
                 : 'ios-home-outline';
-            } else if (route.name === 'ViewProfileScreen') {
+            } else if (route.name === 'ViewProfile') {
               iconName = focused ? 'ios-person' : 'ios-person-outline';
-            } else if (route.name === 'ChatScreen') {
+            } else if (route.name === 'Chat') {
               iconName = focused ? 'ios-chatbubble-ellipses' : 'ios-chatbubble-ellipses-outline';
-            } else if (route.name === 'SettingsScreen') {
+            } else if (route.name === 'Settings') {
               iconName = focused ? 'ios-list' : 'ios-list-outline';
             } 
   
@@ -30,14 +30,14 @@ const BottomNavigator = () => {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
+          tabBarActiveTintColor: '#303f9f',
           tabBarInactiveTintColor: 'gray',
         })}
       >
         <Tab.Screen options={{ headerShown: false }} name="HomeScreen" component={HomeScreen} />
-        <Tab.Screen options={{ headerShown: false }} name="ViewProfileScreen" component={ViewProfileScreen} />
-        <Tab.Screen options={{ headerShown: false }} name="ChatScreen" component={ChatScreen} />
-        <Tab.Screen options={{ headerShown: false }} name="SettingsScreen" component={SettingsScreen} />
+        <Tab.Screen options={{ headerShown: false }} name="ViewProfile" component={ViewProfileScreen} />
+        <Tab.Screen options={{ headerShown: false }} name="Chat" component={ChatScreen} />
+        <Tab.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     );
   }
