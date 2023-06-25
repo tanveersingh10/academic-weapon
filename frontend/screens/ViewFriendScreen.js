@@ -60,7 +60,7 @@ const ViewFriendScreen = ({route}) => {
                 <Divider style={styles.divider} />
                 <Text>Year {yearOfStudy}</Text>
                 <Divider style={styles.divider} />
-                <Text style={styles.words}>{course}</Text>
+                <Text style={styles.words}>{course.charAt(0).toUpperCase() + course.slice(1)}</Text>
             </View>
 
             <Divider />
