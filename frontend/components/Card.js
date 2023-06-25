@@ -25,7 +25,7 @@ const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, stu
             </Card.Content>
             
             <Card.Actions>
-                <Button onPress={() => {}} mode="contained">
+                <Button onPress={() => navigation.navigate('ViewFriendScreen', {uid: uid})} mode="contained">
                     View Profile
                 </Button>
                 <Button onPress={() => navigation.navigate('Chats', {uid: uid, name: name, image: image})} mode="contained-tonal">
