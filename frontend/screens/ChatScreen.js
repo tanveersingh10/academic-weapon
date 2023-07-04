@@ -13,7 +13,7 @@ const ChatScreen = () => {
   const [users, setUsers] = useState(null)
   const [loading, setLoading] = useState(false)
   
-  
+    
   useEffect(() => {
     setLoading(true);
     async function fetchData(userId) {

@@ -27,10 +27,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const profilesReference = collection(db, 'profiles');
 const chatsReference = collection(db, 'Chats')
+const chatHistoryReference = collection(db, 'chatHistory')
 
 const storage = getStorage()
 
 
 const auth = getAuth(app);
 
-export { auth, db, profilesReference, storage, chatsReference};
+export { auth, db, profilesReference, storage, chatsReference, chatHistoryReference};

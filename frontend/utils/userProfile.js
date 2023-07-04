@@ -1,5 +1,5 @@
 import {  getDocs, query, where, doc, getDoc } from "firebase/firestore";
-import { chatsReference, profilesReference  } from '../firebase';
+import { chatsReference, profilesReference, chatHistoryReference } from '../firebase';
 
 const getUserProfile = async (userId) => {
     const q = query(profilesReference, where('userId', '==', userId));
@@ -65,37 +65,22 @@ const getFilteredUsers = async (userId, name, school, course, yearOfStudy, study
 }
 
 const getUsersWithChatHistory = async (userId) => {
-    const sentQuery = query(chatsReference, where("sentBy", "==", userId));
-    const receivedQuery = query(chatsReference, where("sentTo", "==", userId));
+    const q = query(chatHistoryReference, where('userId', "==", userId));
+    const querySnapshot = await getDocs(q);
+    let userIds = [];
+    querySnapshot.forEach((doc) => {
+        userIds = [...userIds, ...doc.data().array];
+    });
 
-    const [sentSnapshot, receivedSnapshot] = await Promise.all([getDocs(sentQuery), getDocs(receivedQuery)]);
+    console.log(userIds);
 
-    const sentDocs = sentSnapshot.docs.map(doc => doc.data())
-  
-    const receivedDocs = receivedSnapshot.docs.map(doc => doc.data());
+    const profilePromises = userIds.map(uid => getUserProfile(uid));
+    const profiles = await Promise.all(profilePromises);
 
-    const chatHistory = [...sentDocs, ...receivedDocs];
-   
-
-    const userIdsInChatHistory = chatHistory.map(chat => chat.sentBy === userId ? chat.sentTo : chat.sentBy);
-    
-    const uniqueUserIdsInChatHistory = [...new Set(userIdsInChatHistory)]; // Removes duplicates
-    
-    let arr = Array.from(uniqueUserIdsInChatHistory)
-    //console.log(arr[0])
-
-    let profiles = [];
-
-    for (let i = 0; i < arr.length; i++) {
-        const q = query(profilesReference, where('userId', '==', arr[i]));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(x => profiles.push(x.data()))
-    }
-
-    console.log(profiles[0])
-
+    console.log(profiles);
     return profiles;
 }
+
 
 
 module.exports = {getUserProfile, getAllUsers, getFilteredUsers, getUsersWithChatHistory}
