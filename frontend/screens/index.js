@@ -14,6 +14,7 @@ import Dashboard from "./Dashboard";
 import ChatScreen from "./ChatScreen";
 import Chats from "./Chats";
 import ViewFriendScreen from "./ViewFriendScreen";
+import ShareNotesScreen from "./ShareNotesScreen";
 
 export  {
     ChatScreen,
@@ -30,5 +31,6 @@ export  {
     WelcomeScreen,
     Dashboard,
     Chats,
-    ViewFriendScreen
+    ViewFriendScreen,
+    ShareNotesScreen
 };

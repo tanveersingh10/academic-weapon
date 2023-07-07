@@ -7,9 +7,6 @@ import {auth} from '../firebase';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 
-
-
-
 const HomeScreen = () => {
 
   const [loading, setLoading] = useState(false);
@@ -27,13 +24,17 @@ const HomeScreen = () => {
   const fetchProfiles = async () => {
     setLoading(true);
     try {
+      
       let profiles;
+      let filteredProfiles;
       if (allProfiles) {
         profiles = allProfiles //dont fetch data from database unless it's needed
       } else {
         profiles = await getAllUsers(auth.currentUser.uid);
+        console.log(profiles)
         setAllProfiles(profiles);
       }
+
       
       if (selectedSchool || selectedCourse || selectedYear || selectedStudySpot || search) {
           let preProcessedSearch = search.toLowerCase().trim(); // remove capitalization and white space
@@ -188,7 +189,7 @@ const HomeScreen = () => {
                     Apply Filters
                   </Button>
 
-                  <Button title="Apply Filters" onPress={handleRemoveFilters}>
+                  <Button title="Remove Filters" onPress={handleRemoveFilters}>
                     Remove Filters
                   </Button>
 

@@ -8,7 +8,7 @@ import { auth } from '../firebase';
 
 const SettingsScreen = () => {
 
-    navigation = useNavigation()
+    const navigation = useNavigation()
 
     const handleSignOut = () => {
       signOut(auth)
