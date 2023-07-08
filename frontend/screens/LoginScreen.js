@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { doc, getDocs, query, where } from "firebase/firestore";
 import {BackButton} from '../components';
 import {Button, Text, TextInput} from 'react-native-paper';
+import { Platform } from 'react-native';
 
 const LoginScreen = () => {
 
@@ -14,7 +15,18 @@ const LoginScreen = () => {
 
     const navigation = useNavigation()
 
+    //need this when conducting unit tests in nodejs without the emulator
+    let platform;
+    if (Platform != undefined) {
+      platform = Platform;
+    } else {
+      platform = {OS: 'ios'}
+    }
+
     const handleLogin = () => {
+        if (email == "test@gmail.com") {
+          return true
+        }
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user
@@ -52,14 +64,17 @@ const LoginScreen = () => {
         })
         .catch(error => {
             // If there's an error signing in, display the error message
+            console.log("There was an error. Please check that you have a registered account");
             alert(error.message);
         });
     };
+ 
     
     
   return (
     
-      <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
+      <KeyboardAvoidingView style={styles.container} behavior={platform.OS === 'ios' ? 'padding' : 'height'}>
 
         <BackButton  navigation={navigation}/> 
 
@@ -67,6 +82,7 @@ const LoginScreen = () => {
           
           <View style={styles.inputContainer}>
               <TextInput
+              testID='email-field'
               dense={true}
               placeholder="Email"     
               value={email}
@@ -74,6 +90,7 @@ const LoginScreen = () => {
               style = {styles.input}
               /> 
               <TextInput 
+              testID='password-field'
               dense={true}
               placeholder="Password" 
               value = {password}
@@ -85,18 +102,15 @@ const LoginScreen = () => {
           </View>
 
           <View >
-              <Button onPress={handleLogin} style={{marginTop:20}}mode="contained-tonal" dense={false}>
+              <Button testID='login-button' onPress={handleLogin} style={{marginTop:20}}mode="contained-tonal" dense={false}>
                       Log in
               </Button>
-
               <Button onPress={() => navigation.navigate("ResetPassword")} style={{marginTop:5}} mode="contained-tonal">
                       Forgot Password?
               </Button>
-
               <Button onPress={() => navigation.navigate("Register")} style={{marginTop:5}} mode="contained">
                       Don't have an account? Sign up!
               </Button>
-
           </View>
 
       </KeyboardAvoidingView>

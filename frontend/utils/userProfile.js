@@ -1,4 +1,4 @@
-import {  getDocs, query, where, doc, getDoc } from "firebase/firestore";
+import {  getDocs, query, where,  } from "firebase/firestore";
 import { chatsReference, profilesReference, chatHistoryReference } from '../firebase';
 
 const getUserProfile = async (userId) => {
@@ -14,14 +14,17 @@ const getUserProfile = async (userId) => {
     return userProfile;
 };
 
-
+ 
 const getAllUsers = async (userId) => {
-    const q = query(profilesReference, where('userId', '!=', userId));
-    const querySnapshot = await getDocs(q);
 
-    profiles = []
+    const q = query(profilesReference, where('userId', '!=', userId));
+    
+    const querySnapshot = await getDocs(q); 
+    
+    const profiles = []
 
     querySnapshot.forEach((doc) => {
+        console.log(doc.data())
         profiles.push(doc.data());
     })
 
@@ -29,7 +32,7 @@ const getAllUsers = async (userId) => {
 }
 
 
-
+ 
 const getFilteredUsers = async (userId, name, school, course, yearOfStudy, studySpot) => {
 
     // Start with base query where 'userId' is not equal to the current 'userId'
@@ -71,13 +74,12 @@ const getUsersWithChatHistory = async (userId) => {
     querySnapshot.forEach((doc) => {
         userIds = [...userIds, ...doc.data().array];
     });
-
-    console.log(userIds);
+ 
 
     const profilePromises = userIds.map(uid => getUserProfile(uid));
     const profiles = await Promise.all(profilePromises);
 
-    console.log(profiles);
+
     return profiles;
 }
 

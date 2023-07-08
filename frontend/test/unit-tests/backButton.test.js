@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../../components/BackButton';
 
@@ -14,13 +14,15 @@ jest.mock('@react-navigation/native', () => {
 });
 
 describe('BackButton', () => {
-  test('renders correctly', () => {
+  test('Does button navigate to previous page', () => {
     const mockGoBack = jest.fn();
     useNavigation.mockReturnValue({
       goBack: mockGoBack,
     });
 
     const { getByTestId } = render(<BackButton />);
-    expect(getByTestId('back-button')).toBeTruthy();
+    //expect(getByTestId('back-button')).toBeTruthy();
+    fireEvent.press(getByTestId('back-button'));
+    expect(mockGoBack).toBeCalled();
   });
 });

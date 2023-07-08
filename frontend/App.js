@@ -38,7 +38,7 @@ export default function App() {
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen options={{ headerShown: false }} name="ShareNotes" component={ShareNotesScreen} />
+        
         <Stack.Screen options={{ headerShown: false }} name="Welcome" component={WelcomeScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Dashboard" component={Dashboard} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
@@ -49,6 +49,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="CreateProfile" component={CreateProfileScreen} />
         <Stack.Screen options={{ headerShown: false }} name="BottomNavigator" component={BottomNavigator} />
         <Stack.Screen options={{ headerShown: false }} name="EditProfileScreen" component={EditProfileScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="ShareNotes" component={ShareNotesScreen} />
         <Stack.Screen
             name="Chats"
             component={Chats}

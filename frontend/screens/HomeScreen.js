@@ -24,7 +24,6 @@ const HomeScreen = () => {
   const fetchProfiles = async () => {
     setLoading(true);
     try {
-      
       let profiles;
       let filteredProfiles;
       if (allProfiles) {
