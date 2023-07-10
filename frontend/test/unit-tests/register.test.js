@@ -49,7 +49,7 @@ describe('RegisterScreen', () => {
           alert: jest.fn(),
         };    
         
-        const { getByPlaceholderText, getByText} = render(<RegisterScreen alertService={alertService}/>);
+        const { getByPlaceholderText, getByText} = render(<RegisterScreen alertSvc={alertService}/>);
         const emailInput = getByPlaceholderText('Email');
         fireEvent.changeText(emailInput, 'example');
 

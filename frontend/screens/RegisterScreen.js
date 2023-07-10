@@ -7,7 +7,7 @@ import BackButton  from '../components/BackButton'
 import {Text, Button, TextInput, Snackbar} from 'react-native-paper'
 import { Platform } from 'react-native';
 
-const RegisterScreen = () => {
+const RegisterScreen = ({alertSvc}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,14 +23,22 @@ const RegisterScreen = () => {
       platform = {OS: 'ios'}
     }
 
-    const alertService = {
-      alert: (message, { visible = true, onDismiss } = {}) => {
-        Alert.alert('Alert', message);
-        if (visible && onDismiss) {
-          onDismiss();
-        }
-      },
-    };
+    let alertService;
+    if (alertSvc != null || alertSvc != undefined){
+      console.log("here")
+      alertService = alertSvc;
+    } else {
+      alertService = {
+        alert: (message, { visible = true, onDismiss } = {}) => {
+          Alert.alert('Alert', message);
+          if (visible && onDismiss) {
+            onDismiss();
+          }
+        },
+      };
+
+    }
+    
     
 
     const handleSignUp = () => {
@@ -53,12 +61,7 @@ const RegisterScreen = () => {
         // Check if email matches the pattern
         if (!nusPattern.test(email) && !smuPattern.test(email) && !ntuPattern.test(email) 
           && !simPattern.test(email) && !sutdPattern.test(email) && !sussPattern.test(email)) {
-            alertService.alert("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM", {
-              visible: true,
-              onDismiss: () => {
-                // Perform any necessary actions when the alert is dismissed
-              },
-            });           
+            alertService.alert("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM");
             return;
         }
 
