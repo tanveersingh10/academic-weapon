@@ -4,7 +4,8 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import BackButton  from '../components/BackButton'
-import {Text, Button, TextInput} from 'react-native-paper'
+import {Text, Button, TextInput, Snackbar} from 'react-native-paper'
+import { Platform } from 'react-native';
 
 const RegisterScreen = () => {
 
@@ -14,9 +15,29 @@ const RegisterScreen = () => {
 
     const navigation = useNavigation()
 
+    //need this when conducting unit tests in nodejs without the emulator
+    let platform;
+    if (Platform != undefined) {
+      platform = Platform;
+    } else {
+      platform = {OS: 'ios'}
+    }
+
+    const alertService = {
+      alert: (message, { visible = true, onDismiss } = {}) => {
+        Alert.alert('Alert', message);
+        if (visible && onDismiss) {
+          onDismiss();
+        }
+      },
+    };
+    
+
     const handleSignUp = () => {
         if (password != confirmPassword) {
-            alert("Passwords do not match");
+          <Snackbar visible={true} onDismiss={() => {}}>
+            Passwords do not match
+          </Snackbar>
             return;
         }
 
@@ -32,7 +53,12 @@ const RegisterScreen = () => {
         // Check if email matches the pattern
         if (!nusPattern.test(email) && !smuPattern.test(email) && !ntuPattern.test(email) 
           && !simPattern.test(email) && !sutdPattern.test(email) && !sussPattern.test(email)) {
-            alert("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM");
+            alertService.alert("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM", {
+              visible: true,
+              onDismiss: () => {
+                // Perform any necessary actions when the alert is dismissed
+              },
+            });           
             return;
         }
 
@@ -42,24 +68,27 @@ const RegisterScreen = () => {
             sendEmailVerification(auth.currentUser)
             .then(() => {
             // Email verification sent
-            Alert.alert(
-                "Success",
-                "Email verification sent!",
-                [
-                  { text: "OK", onPress: () => console.log("OK Pressed") }
-                ],
-                { cancelable: false }
-              );
+            alertService.alert('Success', 'Email verification sent!', {
+              visible: true,
+              onDismiss: () => {},
+            });
+            
             })
             .catch((error) => {
             // Error sending email verification
-            Alert.alert("Error sending email verification");
+            <Snackbar visible={true} onDismiss={() => {}}>
+              Error sending email verification
+            </Snackbar>
             console.log("Error sending email verification: ", error.message);
         });
             console.log("Registered " + user.email)
             navigation.navigate("Verification");  // Navigate to VerificationScreen
         })
-        .catch(error => alert(error));
+        .catch(error => {
+          <Snackbar visible={true} onDismiss={() => {}}>
+            {error.message}
+          </Snackbar>
+        });
     }
 
     return (

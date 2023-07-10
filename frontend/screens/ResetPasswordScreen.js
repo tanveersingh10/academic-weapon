@@ -2,12 +2,21 @@ import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, TextInput, Text, StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Platform } from "react-native";
 
 const ResetPasswordScreen = () => {
   const [email, setEmail] = useState('');
   const auth = getAuth();
   
   const navigation = useNavigation()
+
+  //need this when conducting unit tests in nodejs without the emulator
+  let platform;
+  if (Platform != undefined) {
+    platform = Platform;
+  } else {
+    platform = {OS: 'ios'}
+  }
 
   const handleResetPassword = () => {
     sendPasswordResetEmail(auth, email)

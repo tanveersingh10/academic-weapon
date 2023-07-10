@@ -14,7 +14,7 @@ const WelcomeScreen = () => {
     return (
         <KeyboardAvoidingView style={styles.container}> 
 
-            <Image source={logo} style={{width: 300, height: 300}}  />
+            <Image testID ="logo-field" source={logo} style={{width: 300, height: 300}}  />
             
 
             <View style={styles.buttonContainer}>
