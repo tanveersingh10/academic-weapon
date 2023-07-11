@@ -3,8 +3,6 @@ import React from 'react';
 import { Card, Text, Avatar, Button, useTheme, Divider,} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
-
-
 const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image, uid}) => {
     const theme = useTheme()
     const navigation = useNavigation()
