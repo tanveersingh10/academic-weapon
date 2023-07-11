@@ -32,7 +32,8 @@ const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, stu
             </Card.Actions>
         
         </Card>
-    </SafeAreaView>
+    </SafeAreaView>     
+    
   )
 }
 
