@@ -2,7 +2,8 @@ import BackButton from "./BackButton";
 import BottomNavigator from "./BottomNavigator";
 import Card from "./Card";
 
-//to make exports more modular
+
+//making exports modular
 export {
     BackButton,
     BottomNavigator,
