@@ -105,10 +105,11 @@ const Chats = ({route}) => {
       } else {
         user2doc = doc;
       }
+      
     });
   
     // Only perform updates if necessary
-    if (needToUpdateUser1 && user1doc) {
+    if (needToUpdateUser1 && user1doc) {    
       const array1 = user1doc.data().array;
       array1.push(uid);
       await updateDoc(user1doc.ref, {array: array1});
