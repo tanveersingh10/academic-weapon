@@ -42,4 +42,6 @@ const BottomNavigator = () => {
     );
   }
 
+  //hello world
+
 export default BottomNavigator;
