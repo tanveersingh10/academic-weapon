@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, studySpot, bio, image, uid}) => {
     const theme = useTheme()
     const navigation = useNavigation()
-    
 
   return (
     <SafeAreaView>
@@ -33,7 +32,7 @@ const IndividualCard = ({name, school, yearOfStudy, course, modules, gender, stu
         
         </Card>
     </SafeAreaView>     
-    
+
   )
 }
 
