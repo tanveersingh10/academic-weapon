@@ -3,7 +3,7 @@ name: Unit and Integration Tests
 on: 
   pull_request:
     branches: 
-      -main
+      - main
 
 jobs: 
   test: 
@@ -26,4 +26,3 @@ jobs:
       
       - name: Test Code
         run: npm run test
-
