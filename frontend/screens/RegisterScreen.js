@@ -25,7 +25,6 @@ const RegisterScreen = ({alertSvc}) => {
 
     let alertService;
     if (alertSvc != null || alertSvc != undefined){
-      console.log("here")
       alertService = alertSvc;
     } else {
       alertService = {
