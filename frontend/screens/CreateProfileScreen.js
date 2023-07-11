@@ -140,6 +140,7 @@ const CreateProfileScreen = () => {
                     <Picker.Item label="Post-grad" value ="postgrad" />
                 </Picker>
 
+
                 <Text variant='labelLarge' style={{alignSelf: 'center'}}> Gender </Text>
                 <Picker
                     selectedValue={gender}
