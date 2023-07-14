@@ -36,17 +36,12 @@ const RegisterScreen = ({alertSvc}) => {
           }
         },
       };
-
     }
-    
-    
 
     const handleSignUp = () => {
         if (password != confirmPassword) {
-          <Snackbar visible={true} onDismiss={() => {}}>
-            Passwords do not match
-          </Snackbar>
-            return;
+          alertService.alert("Passwords do not match");
+          return;
         }
 
         //regex for e*******@u.nus.edu
@@ -71,17 +66,11 @@ const RegisterScreen = ({alertSvc}) => {
             sendEmailVerification(auth.currentUser)
             .then(() => {
             // Email verification sent
-            alertService.alert('Success', 'Email verification sent!', {
-              visible: true,
-              onDismiss: () => {},
-            });
-            
+            alertService.alert('Success', 'Email verification sent!');            
             })
             .catch((error) => {
             // Error sending email verification
-            <Snackbar visible={true} onDismiss={() => {}}>
-              Error sending email verification
-            </Snackbar>
+            alertService.alert("Error sending email verification");
             console.log("Error sending email verification: ", error.message);
         });
             console.log("Registered " + user.email)

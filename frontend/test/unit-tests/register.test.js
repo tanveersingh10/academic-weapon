@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react-native';
 import RegisterScreen from '../../screens/RegisterScreen';
-import { Alert } from 'react-native';
 
 jest.useFakeTimers()
 
@@ -44,7 +43,7 @@ describe('RegisterScreen', () => {
         expect(registerButton).toBeTruthy();
       });
     
-      it('should handle sign up with valid email and matching passwords', () => {
+      it('should show alert message when invalid email input', () => {
         const alertService = {
           alert: jest.fn(),
         };    
@@ -65,4 +64,28 @@ describe('RegisterScreen', () => {
     
         expect(alertService.alert).toHaveBeenCalledWith("Please use a valid university email address. Current schools supported are NUS, NTU, SMU, SUSS, SUTD and SIM");
       });
+
+      it('should show alert message when passwords do not match', () => {
+        const alertService = {
+          alert: jest.fn(),
+        };    
+        
+        const { getByPlaceholderText, getByText} = render(<RegisterScreen alertSvc={alertService}/>);
+        const emailInput = getByPlaceholderText('Email');
+        fireEvent.changeText(emailInput, 'example@u.nus.edu');
+
+        const passwordInput = getByPlaceholderText('Password');
+        fireEvent.changeText(passwordInput, 'password123');
+    
+        const confirmPasswordInput = getByPlaceholderText('Confirm Password');
+        fireEvent.changeText(confirmPasswordInput, 'password');
+    
+        const registerButton = getByText('Register');
+
+        fireEvent.press(registerButton);
+    
+        expect(alertService.alert).toHaveBeenCalledWith("Passwords do not match");
+      });
+    
+    
 });

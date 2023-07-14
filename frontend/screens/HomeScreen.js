@@ -210,7 +210,7 @@ const HomeScreen = () => {
       ) : (
         <ScrollView contentContainerStyle={styles.scrollview}>
           
-          <RenderCards array={profilesArray}/>
+          <RenderCards testID = 'cards' array={profilesArray}/>
         </ScrollView>
       )}
     </SafeAreaView>

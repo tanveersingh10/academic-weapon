@@ -25,7 +25,6 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('@react-navigation/bottom-tabs', () => ({
 }))
 
-
 describe('Login Page ', () => {
     
   it('renders correctly', () => {

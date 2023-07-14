@@ -6,11 +6,15 @@ import { useTheme } from 'react-native-paper';
 import logo from '../assets/logo-transparent.png'; 
 
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({mockFunction}) => {
+
+
 
     const theme = useTheme()
 
-    const navigation = useNavigation()
+    const navigation = mockFunction ? mockFunction : useNavigation();
+    console.log(navigation);
+    console.log(navigation.navigate)
     return (
         <KeyboardAvoidingView style={styles.container}> 
 

@@ -8,12 +8,13 @@ import {BackButton} from '../components';
 import {Button, Text, TextInput} from 'react-native-paper';
 import { Platform } from 'react-native';
 
-const LoginScreen = () => {
+const LoginScreen = ({alertSvc, mockFunction}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
 
-    const navigation = useNavigation()
+    const navigation = mockFunction ? mockFunction : useNavigation();
+    
 
     //need this when conducting unit tests in nodejs without the emulator
     let platform;
@@ -23,14 +24,33 @@ const LoginScreen = () => {
       platform = {OS: 'ios'}
     }
 
+    let alertService;
+    if (alertSvc != null || alertSvc != undefined){
+      alertService = alertSvc;
+    } else {
+      alertService = {
+        alert: (message, { visible = true, onDismiss } = {}) => {
+          Alert.alert('Alert', message);
+          if (visible && onDismiss) {
+            onDismiss();
+          }
+        },
+      };
+    }
+
     const handleLogin = () => {
+      console.log("here 1")
         if (email == "test@gmail.com") {
+          console.log("wtf")
           return true
         }
+        console.log(auth)
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
+          console.log("here 2")
             const user = userCredentials.user
             if (user.emailVerified) {
+              console.log("here 3")
               // If profile already created, directs to HomeScreen immediately
               const userId = auth.currentUser.uid;
               const checkIfProfileExists = async (userId) => {
@@ -39,11 +59,13 @@ const LoginScreen = () => {
                   const querySnapshot = await getDocs(q);
                   if (querySnapshot.docs.length > 0) {
                     navigation.navigate("BottomNavigator")
+                    console.log("here 4")
                   } else {
                     console.log("Logged in with " + user.email)
                     navigation.navigate("CreateProfile");
                   }
                 } catch(error) {
+                  
                   console.log(error)
                 }
               }
@@ -64,8 +86,7 @@ const LoginScreen = () => {
         })
         .catch(error => {
             // If there's an error signing in, display the error message
-            console.log("There was an error. Please check that you have a registered account");
-            alert(error.message);
+            alertService.alert("There was an error. Please check that you have a registered account");
         });
     };
  
