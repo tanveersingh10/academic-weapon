@@ -9,6 +9,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { getUsersWithChatHistory } from "../utils/userProfile";
 
+//new
+
 const Chats = ({route}) => {
   
   const navigation = useNavigation()
