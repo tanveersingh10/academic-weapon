@@ -194,4 +194,3 @@ const Chats = ({route}) => {
 export default Chats;
 
 
-
