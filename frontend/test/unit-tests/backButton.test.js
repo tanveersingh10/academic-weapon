@@ -21,7 +21,7 @@ describe('BackButton', () => {
     });
 
     const { getByTestId } = render(<BackButton />);
-    //expect(getByTestId('back-button')).toBeTruthy();
+    expect(getByTestId('back-button')).toBeTruthy();
     fireEvent.press(getByTestId('back-button'));
     expect(mockGoBack).toBeCalled();
   });
