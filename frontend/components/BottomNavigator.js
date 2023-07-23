@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { HomeScreen, RegisterScreen, WelcomeScreen, VerificationScreen, ResetPasswordScreen, PasswordResettedScreen, CreateProfileScreen,
- ViewProfileScreen, SettingsScreen, ChatScreen} from '../screens';
+ ViewProfileScreen, SettingsScreen, ChatScreen, UploadNotesScreen, ShareNotesScreen} from '../screens';
 
 
 
@@ -22,8 +22,8 @@ const BottomNavigator = () => {
               iconName = focused ? 'ios-person' : 'ios-person-outline';
             } else if (route.name === 'Chat') {
               iconName = focused ? 'ios-chatbubble-ellipses' : 'ios-chatbubble-ellipses-outline';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list' : 'ios-list-outline';
+            } else if (route.name === 'ShareNotes') {
+              iconName = focused ? 'ios-document-text' : 'ios-document-text-outline';
             } 
   
   
@@ -32,16 +32,16 @@ const BottomNavigator = () => {
           },
           tabBarActiveTintColor: '#303f9f',
           tabBarInactiveTintColor: 'gray',
+          tabBarShowLabel: false
         })}
       >
         <Tab.Screen options={{ headerShown: false }} name="HomeScreen" component={HomeScreen} />
-        <Tab.Screen options={{ headerShown: false }} name="ViewProfile" component={ViewProfileScreen} />
+        <Tab.Screen options={{ headerShown: false }} name="ShareNotes" component={ShareNotesScreen} />
         <Tab.Screen options={{ headerShown: false }} name="Chat" component={ChatScreen} />
-        <Tab.Screen options={{ headerShown: false }} name="Settings" component={SettingsScreen} />
+        <Tab.Screen options={{ headerShown: false }} name="ViewProfile" component={ViewProfileScreen} />
       </Tab.Navigator>
     );
   }
 
-  //hello world
 
 export default BottomNavigator;

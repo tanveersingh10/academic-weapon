@@ -25,7 +25,6 @@ const PasswordResettedScreen = () => {
 
 export default PasswordResettedScreen;
 
-
 const styles = StyleSheet.create({
     words: {
         textAlign:'center',

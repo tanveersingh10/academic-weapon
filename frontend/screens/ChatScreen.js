@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { auth, db, profilesReference, storage  } from '../firebase';
-import { doc, getDocs, query, where } from "firebase/firestore";
-import { StyleSheet, SafeAreaView, StatusBar, ScrollView, FlatList, View, Text, TouchableOpacity, Image } from 'react-native';
-import { Avatar, Divider, Button, ActivityIndicator} from 'react-native-paper';
-import {getAllUsers, getUsersWithChatHistory}from '../utils/userProfile';
+import { auth } from '../firebase';
+import { StyleSheet, SafeAreaView, StatusBar, FlatList, View, TouchableOpacity } from 'react-native';
+import { Avatar, ActivityIndicator, Text, Appbar } from 'react-native-paper';
+import { getUsersWithChatHistory }from '../utils/userProfile';
+import theme from '../components/theme';
 
 
 const ChatScreen = () => {
@@ -12,7 +12,6 @@ const ChatScreen = () => {
   const userId = auth.currentUser.uid;
   const [users, setUsers] = useState(null)
   const [loading, setLoading] = useState(false)
-  
     
   useEffect(() => {
     setLoading(true);
@@ -27,25 +26,24 @@ const ChatScreen = () => {
         setLoading(false);
       }
     }
-    
     fetchData(userId);
   }, []);
 
-
-  
-  
-
-return (
+  return (
     <SafeAreaView >
+      <Appbar.Header mode={'center-aligned'} style={{ backgroundColor: theme.colors.primary}}>
+          <Appbar.Content testID="chats" title="Chats" color={`#f0f8ff`}/>
+      </Appbar.Header>
       <StatusBar />
       <View>
-
         {loading ? (
           <View style={styles.centered}>
             <ActivityIndicator animating={true} />
           </View>
         ) : (
           <View>
+
+          
             {users ? (
               <FlatList
               data={users}
@@ -70,7 +68,7 @@ return (
             }
           </View>
         )}          
-          </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -150,5 +148,11 @@ highlight: {
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
+},
+headline: {
+  marginTop: 20,
+  alignSelf: 'center',
+  textAlign: 'center',
+  color: theme.colors.primary
 },
 });

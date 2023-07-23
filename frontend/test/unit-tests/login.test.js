@@ -12,6 +12,10 @@ jest.mock('@expo/vector-icons', () => ({
 jest.mock('react-native-vector-icons/Ionicons', () => ({
     Ionicons: 'Ionicons',
   }));
+
+  jest.mock('expo-document-picker', () => ({
+    getDocumentAsync: jest.fn(),
+  }));
   
 
 jest.mock('@react-navigation/native', () => {
@@ -40,7 +44,6 @@ describe('Login Page ', () => {
   });
 
   it('Allows entering email and password, log in button works', async () => {
-    const handlePress = jest.fn();
     const { getByTestId } = render(<LoginScreen />);
     const emailField = getByTestId('email-field');
     const passwordField = getByTestId('password-field');
@@ -56,4 +59,6 @@ describe('Login Page ', () => {
 
     console.log = jest.fn();
   })
+
+  
 })

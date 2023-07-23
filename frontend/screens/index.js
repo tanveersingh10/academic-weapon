@@ -15,6 +15,7 @@ import ChatScreen from "./ChatScreen";
 import Chats from "./Chats";
 import ViewFriendScreen from "./ViewFriendScreen";
 import ShareNotesScreen from "./ShareNotesScreen";
+import UploadNotesScreen from "./UploadNotesScreen";
 
 export  {
     ChatScreen,
@@ -32,5 +33,6 @@ export  {
     Dashboard,
     Chats,
     ViewFriendScreen,
-    ShareNotesScreen
+    ShareNotesScreen, 
+    UploadNotesScreen
 };
