@@ -1,3 +1,4 @@
+
 const theme = {
   "colors": {
     "primary": "rgb(71, 85, 182)",
@@ -40,6 +41,6 @@ const theme = {
     "surfaceDisabled": "rgba(27, 27, 31, 0.12)",
     "onSurfaceDisabled": "rgba(27, 27, 31, 0.38)",
     "backdrop": "rgba(47, 48, 56, 0.4)"
-  }
+  },
 }
 module.exports = theme

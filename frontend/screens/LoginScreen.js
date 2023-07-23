@@ -1,9 +1,9 @@
-import { SafeAreaView, Alert, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { auth, db, profilesReference } from '../firebase';
-import { signInWithEmailAndPassword, onAuthStateChanged, getAuth, } from "firebase/auth";
+import { Alert, KeyboardAvoidingView, SafeAreaView, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { auth, profilesReference } from '../firebase';
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
-import { doc, getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 import {BackButton} from '../components';
 import {Button, Text, TextInput} from 'react-native-paper';
 import { Platform } from 'react-native';
@@ -17,12 +17,12 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
     
 
     //need this when conducting unit tests in nodejs without the emulator
-    let platform;
-    if (Platform != undefined) {
-      platform = Platform;
-    } else {
-      platform = {OS: 'ios'}
-    }
+    // let platform;
+    // if (Platform != undefined) {
+    //   platform = Platform;
+    // } else {
+    //   platform = {OS: 'ios'}
+    // }
 
     let alertService;
     if (alertSvc != null || alertSvc != undefined){
@@ -39,18 +39,13 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
     }
 
     const handleLogin = () => {
-      console.log("here 1")
         if (email == "test@gmail.com") {
-          console.log("wtf")
           return true
         }
-        console.log(auth)
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
-          console.log("here 2")
             const user = userCredentials.user
             if (user.emailVerified) {
-              console.log("here 3")
               // If profile already created, directs to HomeScreen immediately
               const userId = auth.currentUser.uid;
               const checkIfProfileExists = async (userId) => {
@@ -59,17 +54,14 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
                   const querySnapshot = await getDocs(q);
                   if (querySnapshot.docs.length > 0) {
                     navigation.navigate("BottomNavigator")
-                    console.log("here 4")
                   } else {
                     console.log("Logged in with " + user.email)
                     navigation.navigate("CreateProfile");
                   }
-                } catch(error) {
-                  
+                } catch(error) {                 
                   console.log(error)
                 }
               }
-              
               checkIfProfileExists(userId)
             } else {
                 // If email is not verified, ask the user to verify the email
@@ -88,16 +80,12 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
             // If there's an error signing in, display the error message
             alertService.alert("There was an error. Please check that you have a registered account");
         });
-    };
- 
+    };    
     
-    
-  return (
-    
+  return ( 
+      <SafeAreaView style={styles.container}>
 
-      <KeyboardAvoidingView style={styles.container} behavior={platform.OS === 'ios' ? 'padding' : 'height'}>
-
-        <BackButton  navigation={navigation}/> 
+        <BackButton navigation={navigation} style={styles.container}/> 
 
         <Text variant="headlineSmall"> Log In </Text>
           
@@ -119,7 +107,6 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
               style = {styles.input}
               secureTextEntry
               /> 
-
           </View>
 
           <View >
@@ -134,8 +121,7 @@ const LoginScreen = ({alertSvc, mockFunction}) => {
               </Button>
           </View>
 
-      </KeyboardAvoidingView>
-      
+      </SafeAreaView>  
   )
 }
 

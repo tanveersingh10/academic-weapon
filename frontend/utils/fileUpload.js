@@ -15,10 +15,12 @@ const pickFile = async () => {
   }
 };
 
-const uploadFileToFirebase = async (file, name) => {
+const uploadFileToFirebase = async (file) => {
   try {
+
+
     const blob = await (await fetch(file.uri)).blob();
-    const filename = name || file.name;
+    const filename = new Date().getTime().toString();
     const fileRef = ref(storage, `notes/${filename}`);
     const uploadTask = uploadBytesResumable(fileRef, blob);
 

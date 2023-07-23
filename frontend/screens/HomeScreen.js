@@ -1,11 +1,12 @@
 import { StyleSheet, View, SafeAreaView, ScrollView, Modal, TouchableOpacity} from 'react-native'
 import React, {useEffect, useState} from 'react'
 import IndividualCard from '../components/Card'
-import {Text, ActivityIndicator, Button, TextInput} from 'react-native-paper';
-import {getAllUsers, getFilteredUsers} from '../utils/userProfile';
+import {Text, ActivityIndicator, Button, Searchbar, Appbar} from 'react-native-paper';
+import {getAllUsers} from '../utils/userProfile';
 import {auth} from '../firebase';
 import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
+import theme from '../components/theme';
 
 const HomeScreen = () => {
 
@@ -16,9 +17,12 @@ const HomeScreen = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedStudySpot, setSelectedStudySpot] = useState('');
+  const [willingToTeachFilter, setWillingToTeachFilter] = useState(false);
   const [search, setSearch] = useState('');
   const [filtersApplied, setFiltersApplied] = useState(0); 
   const [allProfiles, setAllProfiles] = useState(null);
+  
+
 
 
   const fetchProfiles = async () => {
@@ -30,19 +34,21 @@ const HomeScreen = () => {
         profiles = allProfiles //dont fetch data from database unless it's needed
       } else {
         profiles = await getAllUsers(auth.currentUser.uid);
-        console.log(profiles)
         setAllProfiles(profiles);
       }
-
-      
-      if (selectedSchool || selectedCourse || selectedYear || selectedStudySpot || search) {
+  
+      if (selectedSchool || selectedCourse || selectedYear || selectedStudySpot || search || willingToTeachFilter) {
           let preProcessedSearch = search.toLowerCase().trim(); // remove capitalization and white space
-          filteredProfiles = profiles.filter(x => x.school.includes(selectedSchool) && x.course.includes(selectedCourse) 
-            && x.yearOfStudy.includes(selectedYear) && x.studySpot.includes(selectedStudySpot) && 
-            x.name.toLowerCase().includes(preProcessedSearch));
-
+          filteredProfiles = profiles.filter(x => 
+            x.school.includes(selectedSchool) && 
+            x.course.includes(selectedCourse) &&
+            x.yearOfStudy.includes(selectedYear) && 
+            x.studySpot.includes(selectedStudySpot) && 
+            x.name.toLowerCase().includes(preProcessedSearch) &&
+            (willingToTeachFilter ? x.willingToTeach === true : true))
+  
           setProfilesArray(filteredProfiles);
-
+  
       } else {
           setProfilesArray(profiles);
       }    
@@ -52,19 +58,21 @@ const HomeScreen = () => {
     } finally { 
         setLoading(false);
     }
-}
+  }
+  
+
 
   useEffect(() => {
     fetchProfiles();
-  }, [selectedSchool, selectedCourse, selectedYear, selectedStudySpot, search, filtersApplied]);
+  }, [selectedSchool, selectedCourse, selectedYear, selectedStudySpot, search, willingToTeachFilter, filtersApplied]);
 
 
   const RenderCards = ({array}) => {
     if (array?.length > 0) {
       return array.map((user, index) => <IndividualCard key={user.id || index} name={user.name} gender={user.gender} course={user.course} bio={user.bio}
-        modules={user.modules} school={user.school} yearOfStudy={user.yearOfStudy} studySpot={user.studySpot} image={user.image} uid={user.userId}/> )
+        modules={user.modules} school={user.school} yearOfStudy={user.yearOfStudy} studySpot={user.studySpot} image={user.image} uid={user.userId} willingToTeach={user.willingToTeach}/> )
     } else {
-      return <Text>No users found</Text>
+      return <Text style={{fontSize:30, alignSelf:'center', marginTop: 100}}>No users found!</Text>
     }
   } 
 
@@ -96,18 +104,15 @@ const HomeScreen = () => {
     setSelectedCourse('');
     setSelectedYear('');
     setSelectedStudySpot('');
+    setWillingToTeachFilter(false);
   }
     
   return (
     <SafeAreaView style={styles.container}>
-      <Text variant="headlineSmall" style={styles.headline}>
-            Find your Study Buddy today!
-        </Text>
-
-        <Button title="Filter by school" onPress={() => setShowFilter(!showFilter)}> 
-          Filter
-        </Button>
-
+      <Appbar.Header testID='banner' mode={'center-aligned'} style={{ backgroundColor: theme.colors.primary}}>
+          <Appbar.Content title="Find your Study Buddy today!" color={`#f0f8ff`}/>  
+      </Appbar.Header>
+      
             {showFilter && (  
                <Modal
                animationType="slide"
@@ -121,34 +126,36 @@ const HomeScreen = () => {
                 </TouchableOpacity>
                 <ScrollView> 
 
-                <Text variant='labelLarge' style={{alignSelf: 'center', marginTop:20}}>Search for a name!</Text>
-                  <TextInput
-                      dense={true}
-                      placeholder="Search"
-                      value={search}
-                      onChangeText={setSearch}
+                <Text variant='labelLarge' style={{alignSelf:'center', marginTop:20, fontWeight:'bold'}}>Search for a name!</Text>
+                  <Searchbar
+                    style={{marginTop: 20, marginBottom: 15, width: '90%', alignSelf:'center'}}
+                    placeholder="Search"
+                    value={search}
+                    onChangeText={setSearch}
                   />
-
                 
-                  <Text variant='labelLarge' style={{alignSelf: 'center'}}>Select School</Text>
-                  <Picker
-                  selectedValue={selectedSchool}
-                  onValueChange={handleSchoolChange}
-                  >
-                    <Picker.Item label="All" value='' />
-                    <Picker.Item label="NTU" value="ntu" />
-                    <Picker.Item label="NUS" value="nus" />
-                    <Picker.Item label="SIM" value="sim" />
-                    <Picker.Item label="SMU" value="smu" />
-                    <Picker.Item label="SUTD" value="sutd" />
-                    <Picker.Item label="SUSS" value="suss" />
-                  </Picker>
+                  <Text variant='labelLarge' style={styles.select}>Select School</Text>
+                  <View style={styles.picker}>
+                    <Picker
+                      selectedValue={selectedSchool}
+                      onValueChange={handleSchoolChange}
+                    >
+                      <Picker.Item label="All" value='' />
+                      <Picker.Item label="NTU" value="ntu" />
+                      <Picker.Item label="NUS" value="nus" />
+                      <Picker.Item label="SIM" value="sim" />
+                      <Picker.Item label="SMU" value="smu" />
+                      <Picker.Item label="SUTD" value="sutd" />
+                      <Picker.Item label="SUSS" value="suss" />
+                    </Picker>
+                  </View>
 
-                  <Text variant='labelLarge' style={{alignSelf: 'center'}}>Select Course</Text>
-                  <Picker
-                    selectedValue={selectedCourse}
-                    onValueChange={handleCourseChange}
-                  >
+                  <Text variant='labelLarge' style={styles.select}>Select Course</Text>
+                  <View style={styles.picker}>
+                    <Picker
+                      selectedValue={selectedCourse}
+                      onValueChange={handleCourseChange}
+                    >
                         <Picker.Item label="All" value="" />
                         <Picker.Item label="Architecture" value="architecture" />
                         <Picker.Item label="Arts" value="arts" />
@@ -163,26 +170,38 @@ const HomeScreen = () => {
                         <Picker.Item label="Science" value="science" />
                         <Picker.Item label="Others" value="others" />
                   </Picker>
+                  </View>
+                  
+                  <Text variant='labelLarge' style={styles.select}>Select Year</Text>
+                  <View style={styles.picker}>
+                    <Picker selectedValue={selectedYear} onValueChange={handleYearChange}>
+                        <Picker.Item label="All" value='' />
+                        <Picker.Item label="1" value="1" />
+                        <Picker.Item label="2" value ="2" />
+                        <Picker.Item label="3" value="3" />
+                        <Picker.Item label="4" value ="4" />
+                        <Picker.Item label="Post-grad" value ="postgrad" />
+                    </Picker>
+                  </View>
 
+                  <Text variant='labelLarge' style={styles.select}>Select Study Spot</Text>
+                  <View style={styles.picker}>
+                    <Picker selectedValue={selectedStudySpot} onValueChange={handleStudyChange}>
+                        <Picker.Item label="All" value='' />
+                        <Picker.Item label="In School" value="school" />
+                        <Picker.Item label="Libraries" value="libraries" />
+                        <Picker.Item label="Cafes" value="cafes" />
+                    </Picker>
+                  </View>
 
-                  <Text variant='labelLarge' style={{alignSelf: 'center'}}>Select Year</Text>
-                  <Picker selectedValue={selectedYear} onValueChange={handleYearChange}>
-                      <Picker.Item label="All" value='' />
-                      <Picker.Item label="1" value="1" />
-                      <Picker.Item label="2" value ="2" />
-                      <Picker.Item label="3" value="3" />
-                      <Picker.Item label="4" value ="4" />
-                      <Picker.Item label="Post-grad" value ="postgrad" />
-                  </Picker>
+                  <Text variant='labelLarge' style={styles.select}>Willing to Teach</Text>
+                  <View style={styles.picker}>
+                    <Picker selectedValue={willingToTeachFilter} onValueChange={setWillingToTeachFilter}>
+                      <Picker.Item label="All" value={false} />
+                      <Picker.Item label="Willing to Teach" value={true} />
+                    </Picker>
+                  </View>
 
-
-                  <Text variant='labelLarge' style={{alignSelf: 'center'}}>Select Study Spot</Text>
-                  <Picker selectedValue={selectedStudySpot} onValueChange={handleStudyChange}>
-                      <Picker.Item label="All" value='' />
-                      <Picker.Item label="In School" value="school" />
-                      <Picker.Item label="Libraries" value="libraries" />
-                      <Picker.Item label="Cafes" value="cafes" />
-                  </Picker>
 
                   <Button title="Apply Filters" onPress={handleApplyFilters}>
                     Apply Filters
@@ -209,8 +228,16 @@ const HomeScreen = () => {
         </View>
       ) : (
         <ScrollView contentContainerStyle={styles.scrollview}>
+         
+        <Button testID='filter' title="Filter by school" onPress={() => setShowFilter(!showFilter)}> 
+           Filter
+          </Button>
+
+
           
-          <RenderCards testID = 'cards' array={profilesArray}/>
+          <View testID='cards'>
+            <RenderCards array={profilesArray}/>
+          </View>
         </ScrollView>
       )}
     </SafeAreaView>
@@ -235,13 +262,26 @@ const styles = StyleSheet.create({
   },
   headline: {
     marginTop: 20,
+    marginBottom:5,
     alignSelf: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.colors.primary
   },
   closeButton: {
     position: 'absolute', 
     right: 10, 
     top: 20, 
     zIndex: 1
+  }, 
+  picker: {
+    backgroundColor: theme.colors.secondaryContainer, 
+    width: '90%', 
+    alignSelf: 'center', 
+    borderRadius: 10 
+  },
+  select: {
+    alignSelf: 'center',
+    marginTop: 5,
+    fontWeight: 'bold'
   }
 });

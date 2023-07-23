@@ -9,6 +9,8 @@ import * as ImagePicker from 'expo-image-picker';
 import {BackButton} from '../components';
 import {uploadImageToFirebase, pickImage} from '../utils/imageUpload';
 import {Text, Button, TextInput} from 'react-native-paper';
+import theme from '../components/theme'
+import { Platform } from 'react-native';
 
 const CreateProfileScreen = () => {
 
@@ -21,6 +23,7 @@ const CreateProfileScreen = () => {
     const [studySpot, setStudySpot] = useState('');
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
+    const [willingToTeach, setWilling] = useState(false);
     
     const userId = auth.currentUser.uid;
 
@@ -33,6 +36,10 @@ const CreateProfileScreen = () => {
     };
 
     const handleCreateProfile = async () => {
+        if (name === "" || school === "" || yearOfStudy === "" || course === "" || gender === "" || bio === "" || studySpot === "" || image === null) {
+            alert("Please enter all required fields");
+            return
+        }
         let imageUrl = image;
         if (image) {
             imageUrl = await uploadImageToFirebase(image);
@@ -48,7 +55,8 @@ const CreateProfileScreen = () => {
             studySpot,
             bio,
             image: imageUrl,
-            userId: userId
+            userId: userId,
+            willingToTeach
         };
 
         // Save the profile to Firebase
@@ -74,12 +82,11 @@ const CreateProfileScreen = () => {
 
 
     return (
-        <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <ScrollView style={{ flex: 1 }}>
- 
-                <BackButton />
-             
+        <SafeAreaView>
+            <BackButton/>
 
+            <ScrollView style={{ flex: 1, justiifyContent:'center'}}>
+                
                 <Text style={{fontSize: 30, marginTop: 30, marginBottom: 30, alignSelf: 'center'}}>Create your profile!</Text>
                 
                 <TextInput
@@ -90,28 +97,33 @@ const CreateProfileScreen = () => {
                     onChangeText={setName}
                 />
 
-                <Picker
-                    selectedValue={school}
-                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSchool(itemValue)
-                    }>
-                    <Picker.Item label="NUS" value="nus" />
-                    <Picker.Item label="NTU" value="ntu" />
-                    <Picker.Item label="SMU" value="smu" />
-                    <Picker.Item label="SUSS" value="suss" />
-                    <Picker.Item label="SUTD" value="sutd" />
-                    <Picker.Item label="SIM" value="sim" />
-                </Picker> 
+                <Text variant="labelLarge" style={styles.select}>Choose your school!</Text>
+                <View style={styles.picker}>
+                    <Picker
+                      selectedValue={school}
+                      onValueChange={(itemValue, itemIndex) =>
+                          setSchool(itemValue)
+                      }
+                    >
+                      <Picker.Item label="All" value='' />
+                      <Picker.Item label="NTU" value="ntu" />
+                      <Picker.Item label="NUS" value="nus" />
+                      <Picker.Item label="SIM" value="sim" />
+                      <Picker.Item label="SMU" value="smu" />
+                      <Picker.Item label="SUTD" value="sutd" />
+                      <Picker.Item label="SUSS" value="suss" />
+                    </Picker>
+                  </View>
 
-                <Text variant='labelLarge' style={{alignSelf: 'center'}}>Choose your Course!</Text>
-                <Picker
-                    selectedValue={course}
-                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setCourse(itemValue)
-                    }>
-                    <Picker.Item label="Accounting" value="accounting" />
+                <Text variant='labelLarge' style={styles.select}>Choose your course!</Text>
+                  <View style={styles.picker}>
+                    <Picker
+                      selectedValue={course}
+                      onValueChange={(itemValue, itemIndex) =>
+                          setCourse(itemValue)
+                      }
+                    >
+                        <Picker.Item label="All" value="" />
                         <Picker.Item label="Architecture" value="architecture" />
                         <Picker.Item label="Arts" value="arts" />
                         <Picker.Item label="Business" value="business" />
@@ -124,36 +136,40 @@ const CreateProfileScreen = () => {
                         <Picker.Item label="Medicine" value="medicine" />
                         <Picker.Item label="Science" value="science" />
                         <Picker.Item label="Others" value="others" />
-                </Picker> 
+                  </Picker>
+                  </View> 
 
-                <Text variant='labelLarge' style={{alignSelf:'center'}}> Year of study </Text>
-                <Picker
-                    selectedValue={yearOfStudy}
-                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setYearOfStudy(itemValue)
-                    }>
-                    <Picker.Item label="1" value="1" />
-                    <Picker.Item label="2" value ="2" />
-                    <Picker.Item label="3" value="3" />
-                    <Picker.Item label="4" value ="4" />
-                    <Picker.Item label="Post-grad" value ="postgrad" />
-                </Picker>
+                <Text variant='labelLarge' style={styles.select}>Year of Study</Text>
+                  <View style={styles.picker}>
+                    <Picker
+                        selectedValue={yearOfStudy}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setYearOfStudy(itemValue)
+                        }
+                    >
+                        <Picker.Item label="All" value='' />
+                        <Picker.Item label="1" value="1" />
+                        <Picker.Item label="2" value ="2" />
+                        <Picker.Item label="3" value="3" />
+                        <Picker.Item label="4" value ="4" />
+                        <Picker.Item label="Post-grad" value ="postgrad" />
+                    </Picker>
+                  </View>
 
+                <Text variant="labelLarge" style={styles.select}> Gender </Text>
+                  <View style={styles.picker}>
+                    <Picker
+                        selectedValue={gender}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setGender(itemValue)
+                        }>
+                        <Picker.Item label="Male" value="male" />
+                        <Picker.Item label="Female" value="female" />
+                    </Picker>
+                </View>       
 
-                <Text variant='labelLarge' style={{alignSelf: 'center'}}> Gender </Text>
-                <Picker
-                    selectedValue={gender}
-                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setGender(itemValue)
-                    }>
-                    <Picker.Item label="Male" value="male" />
-                    <Picker.Item label="Female" value="female" />
-                </Picker> 
-
-                <Text variant='labelLarge' style={{alignSelf:'center'}}> What modules are you taking this semester?</Text>
-                <Text variant='labelLarge' style={{alignSelf:'center'}}> Enter the module codes separated by commas! </Text>
+                <Text variant="labelLarge" style={styles.select}> What modules are you taking this semester?</Text>
+                <Text variant="labelLarge" style={styles.select}> Enter the module codes separated by commas! </Text>
                 <TextInput
                     dense={true}
                     style={styles.input}
@@ -162,44 +178,62 @@ const CreateProfileScreen = () => {
                     onChangeText={handleModuleInputChange}
                 />
 
-                <Text variant='labelLarge' style={{alignSelf:'center'}}> Tell other students about your interests and hobbies!</Text>
-                <TextInput 
-                    dense={true}
-                    style={styles.bioInput}
-                    placeholder="Enter Your Bio Here"
+                <Text variant="labelLarge" style={styles.select}> Tell other students about your interests and hobbies!</Text>
+                <TextInput
+                    mode="outlined"
+                    label="Bio"
                     value={bio}
-                    multiline
                     onChangeText={setBio}
+                    multiline
+                    numberOfLines={4}
+                    style={styles.bioInput}
                 />
 
-                <Text variant='labelLarge' style={{alignSelf:'center'}}>Where do you prefer to study?</Text>
-                <Picker
-                    selectedValue={studySpot}
-                    style={{width: 200, marginBottom: 20, alignSelf:'center'}}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setStudySpot(itemValue)
-                    }>
-                    <Picker.Item label="In School" value="school" />
-                    <Picker.Item label="Libraries" value="libraries" />
-                    <Picker.Item label="Cafes" value="cafes" />
-                    <Picker.Item label="Anything goes!" value="anything" />
-                    
-                    
-                </Picker> 
+                <Text variant='labelLarge' style={styles.select}>Where do you prefer to study?</Text>
+                <View style={styles.picker}>
+                    <Picker
+                        selectedValue={studySpot}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setStudySpot(itemValue)
+                        }>
+                        <Picker.Item label="In School" value="school" />
+                        <Picker.Item label="Libraries" value="libraries" />
+                        <Picker.Item label="Cafes" value="cafes" />
+                        <Picker.Item label="Anything goes!" value="anything" />
+                    </Picker>
+                </View>
 
-                <Text variant='labelLarge' style={{alignSelf:'center'}}>Upload a picture of yourself if you'd like!</Text>
+                <Text variant='labelLarge' style={styles.select}> Are you willing to teach? </Text>
+                <View style={styles.picker}>
+                    <Picker
+                        selectedValue={willingToTeach}
+                        onValueChange={(itemValue, itemIndex) =>
+                            setWilling(itemValue)
+                        }>
+                        <Picker.Item label="Yes" value={true} />
+                        <Picker.Item label="No" value={false} />
+                    </Picker>
+                </View>
 
-                <Button title="Pick an image from camera roll" onPress={pickImage} />
+                <Text variant='labelLarge' style={styles.select}>Upload a picture of yourself if you'd like!</Text>
+
+                <Button title="Pick an image from camera roll" onPress={async () => {
+                    const uri = await pickImage();
+                    if(uri) {
+                        setImage(uri);
+                        setImageChanged(true);
+                    }
+            }}>
+                Pick an Image from your camera roll
+                </Button>
                 {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, alignSelf:'center'}} />}
 
-                <Button onPress={handleCreateProfile}>
+                <Button onPress={handleCreateProfile} mode="contained" style={{marginTop:20}}>  
                         I'm ready!
                 </Button>
                 
-          
             </ScrollView>
-            
-
+        
         </SafeAreaView>
     )
 
@@ -272,4 +306,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingTop: 10,
     },
+    picker: {
+        backgroundColor: theme.colors.secondaryContainer, 
+        width: '90%', 
+        alignSelf: 'center', 
+        borderRadius: 10 
+      },
+      select: {
+        alignSelf: 'center',
+        marginTop: 5,
+        fontWeight: 'bold'
+      }
   })

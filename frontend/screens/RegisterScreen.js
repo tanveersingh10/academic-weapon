@@ -1,11 +1,11 @@
-import { Alert, KeyboardAvoidingView, StyleSheet, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Alert, KeyboardAvoidingView, StyleSheet, View, SafeAreaView } from 'react-native'
+import React, { useState } from 'react'
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import BackButton  from '../components/BackButton'
-import {Text, Button, TextInput, Snackbar} from 'react-native-paper'
-import { Platform } from 'react-native';
+import { Button, TextInput, Snackbar} from 'react-native-paper'
+//import { Platform } from 'react-native';
 
 const RegisterScreen = ({alertSvc}) => {
 
@@ -15,17 +15,17 @@ const RegisterScreen = ({alertSvc}) => {
 
     const navigation = useNavigation()
 
+
     //need this when conducting unit tests in nodejs without the emulator
-    let platform;
-    if (Platform != undefined) {
-      platform = Platform;
-    } else {
-      platform = {OS: 'ios'}
-    }
+    // let platform;
+    // if (Platform != undefined) {
+    //   platform = Platform;
+    // } else {
+    //   platform = {OS: 'ios'}
+    // }
 
     let alertService;
     if (alertSvc != null || alertSvc != undefined){
-      console.log("here")
       alertService = alertSvc;
     } else {
       alertService = {
@@ -84,7 +84,7 @@ const RegisterScreen = ({alertSvc}) => {
     }
 
     return (
-        <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <SafeAreaView style={styles.container}>
           <BackButton />
             <View style={styles.inputContainer}>
                 <TextInput 
@@ -121,7 +121,7 @@ const RegisterScreen = ({alertSvc}) => {
                 </Button>
 
             </View>
-        </KeyboardAvoidingView>
+          </SafeAreaView>
     )
 }
 
