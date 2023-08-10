@@ -25,6 +25,12 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('@react-navigation/bottom-tabs', () => ({
 }))
 
+
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn(),
+}));
+  
+
 describe('WelcomeScreen', () => {
     it('renders correctly', () => {
 

@@ -13,6 +13,10 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn(),
+}));
+
 describe('BackButton', () => {
   test('Does button navigate to previous page', () => {
     const mockGoBack = jest.fn();

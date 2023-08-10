@@ -5,21 +5,20 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import { LoginScreen, HomeScreen, RegisterScreen, WelcomeScreen, VerificationScreen, ResetPasswordScreen, PasswordResettedScreen, CreateProfileScreen,
-    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen, Dashboard, Chats, ViewFriendScreen, ShareNotesScreen} from './screens';
+    EditProfileScreen, ViewProfileScreen, SettingsScreen, ChatScreen, Dashboard, Chats, ViewFriendScreen, ShareNotesScreen, UploadNotesScreen} from './screens';
 import  { BottomNavigator } from './components';
-import { MD3LightTheme as DefaultTheme, PaperProvider} from 'react-native-paper';
+import {  PaperProvider} from 'react-native-paper';
 import theme from './components/theme';
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  //const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
+      if (user && user.emailVerified) {    
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
@@ -30,7 +29,7 @@ export default function App() {
 
   const [currentScreen, setCurrentScreen] = useState('WelcomeScreen');
 
-  const shouldShowBottomNavigator = ['HomeScreen', 'ViewProfileScreen', 'EditProfileScreen'].includes(
+  const shouldShowBottomNavigator = ['HomeScreen', 'ViewProfileScreen', 'EditProfileScreen', 'UploadNotesScreen'].includes(
     currentScreen
   );
 
@@ -50,6 +49,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="BottomNavigator" component={BottomNavigator} />
         <Stack.Screen options={{ headerShown: false }} name="EditProfileScreen" component={EditProfileScreen} />
         <Stack.Screen options={{ headerShown: false }} name="ShareNotes" component={ShareNotesScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="UploadNotes" component={UploadNotesScreen} />
         <Stack.Screen
             name="Chats"
             component={Chats}
@@ -64,14 +64,3 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'light blue',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 50
-  }
-});

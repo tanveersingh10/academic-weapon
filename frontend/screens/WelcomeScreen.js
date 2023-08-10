@@ -1,14 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View, Image} from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View, Image} from 'react-native';
 import {Button, Text} from 'react-native-paper'
 import { useTheme } from 'react-native-paper';
 import logo from '../assets/logo-transparent.png'; 
 
-
 const WelcomeScreen = ({mockFunction}) => {
-
-
 
     const theme = useTheme()
 
@@ -20,7 +17,6 @@ const WelcomeScreen = ({mockFunction}) => {
 
             <Image testID ="logo-field" source={logo} style={{width: 300, height: 300}}  />
             
-
             <View style={styles.buttonContainer}>
                 <View style={{width: "100%"}}>
                   <Button onPress={() => navigation.navigate("Login")} mode="contained-tonal" compact={false} theme={theme}>
@@ -31,17 +27,12 @@ const WelcomeScreen = ({mockFunction}) => {
                     <Text style={{color: "white"}}> Register </Text>
                   </Button>
               </View>
-
-              
             </View>
-        </KeyboardAvoidingView>
-
-       
+        </KeyboardAvoidingView>       
     )
 }
 
 export default WelcomeScreen;
-
 
 const styles = StyleSheet.create({
     container: {

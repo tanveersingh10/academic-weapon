@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react-native';
-import { HomeScreen } from '../../screens';
+import { render, fireEvent } from '@testing-library/react-native';
+
+import { ViewProfileScreen } from '../../screens';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-// Mock the dependencies used in the HomeScreen component
 global.alert = (message) => {
     console.log(message);
   };
@@ -46,20 +46,23 @@ jest.mock('expo-document-picker', () => ({
 }));
 
 
-describe('HomeScreen', () => {
-  it('should render fully', async () => {
-    const { findByTestId } = render(
-        <SafeAreaProvider>
-          <HomeScreen />
-        </SafeAreaProvider>
-      );
+jest.mock('firebase/firestore', () => ({
+    
+  }));
 
-    const banner = findByTestId('banner');
-    const filter = findByTestId('filter');
-    const cards = findByTestId('cards');
-  
-  expect(cards).toBeTruthy();
-  expect(filter).toBeTruthy();
-  expect(banner).toBeTruthy();
+
+describe('WelcomeScreen', () => {
+  it('navigates on button press', () => {
+    const navigation = {
+        navigate: jest.fn()
+    }
+    const { getByTestId } = render(
+        <SafeAreaProvider>
+            <ViewProfileScreen mockFunction={ navigation } />
+        </SafeAreaProvider>
+    );
+
+    fireEvent.press(getByTestId('edit-profile'));
+    expect(navigation.navigate).toHaveBeenCalledWith('EditProfileScreen');
   });
 });

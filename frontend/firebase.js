@@ -6,11 +6,10 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { config } from 'dotenv';
 config();
 
-
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -20,10 +19,10 @@ const firebaseConfig = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
   measurementId: process.env.FIREBASE_MEASUREMENT_ID
-};
+}
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig); 
+const app = initializeApp(firebaseConfig);  
 
 
 const db = getFirestore(app);

@@ -1,22 +1,24 @@
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import {sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, TextInput, Text, StyleSheet, TouchableOpacity, View, Alert } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, TouchableOpacity, View, Alert, SafeAreaView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Platform } from "react-native";
+// import { Platform } from "react-native";
+import { BackButton } from "../components";
+import { TextInput, Button, Title, Text} from 'react-native-paper';
+import { auth } from "../firebase";
 
 const ResetPasswordScreen = () => {
   const [email, setEmail] = useState('');
-  const auth = getAuth();
   
   const navigation = useNavigation()
 
   //need this when conducting unit tests in nodejs without the emulator
-  let platform;
-  if (Platform != undefined) {
-    platform = Platform;
-  } else {
-    platform = {OS: 'ios'}
-  }
+  // let platform;
+  // if (Platform != undefined) {
+  //   platform = Platform;
+  // } else {
+  //   platform = {OS: 'ios'}
+  // }
 
   const handleResetPassword = () => {
     sendPasswordResetEmail(auth, email)
@@ -25,7 +27,7 @@ const ResetPasswordScreen = () => {
           'Password Reset',
           'A password reset email has been sent to your email address.'
         );
-        navigation.navigate("PasswordResetted");
+        navigation.navigate("PasswordResetted"); 
       })
       .catch(error => {
         Alert.alert('Error', error.message);
@@ -33,32 +35,30 @@ const ResetPasswordScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <View style={styles.inputContainer}>
-            <TextInput 
-            placeholder="Email"
+    <SafeAreaView>
+      <BackButton />
+  
+      <Title style={{textAlign: 'center', marginBottom: 40}}>Forgot Your Password?</Title>
+        
+      <View style={styles.inputContainer}>
+          <TextInput 
+            testID="email"
+            label="Email"
             value={email}
             onChangeText={text => setEmail(text)}
-            style = {styles.input}
-            />
-        </View>
+    
+          />
+      </View>
       
-        <View style={styles.buttonContainer}>  
-            <TouchableOpacity onPress={handleResetPassword} style={[styles.button, styles.buttonOutline]}>
-            <Text style={styles.buttonOutlineText}> 
-                RESET PASSWORD
-            </Text>
-            </TouchableOpacity>
-        </View>
-
-        <View style={styles.bottomButtonContainer}>
-                <TouchableOpacity style={[styles.buttonOutline]} onPress={() => navigation.goBack()}>
-                    <Text style={styles.buttonOutlineText}> Back </Text>
-                </TouchableOpacity>
-        </View>
-    </KeyboardAvoidingView>
+      <View style={styles.buttonContainer}>  
+          <Button onPress={handleResetPassword} mode="contained">
+            Reset Password
+          </Button>
+      </View>
+  
+    </SafeAreaView>
   );
-};
+}
 
 export default ResetPasswordScreen;
 
@@ -84,32 +84,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       marginTop: 40,
-    },
-    button: {
-      backgroundColor: '#0782F9',
-      width: '100%',
-      padding: 15,
-      borderRadius: 10,
-      alignItems: 'center',
-    },
-    buttonOutline: {
-      backgroundColor: 'white',
-      marginTop: 5,
-      borderColor: '#0782F9',
-      borderWidth: 2,
-    },
-    buttonText: {
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 16,
-    },
-    buttonOutlineText: {
-      color: '#0782F9',
-      fontWeight: '700',
-      fontSize: 16,
-    },
-    bottomButtonContainer: {
-        position: 'absolute',
-        bottom: 20
     }
+
+
   })

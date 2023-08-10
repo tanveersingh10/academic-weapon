@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, KeyboardAvoidingView, ScrollView, View, TextInput, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { auth, db, profilesReference, storage  } from '../firebase';
+import { SafeAreaView, ScrollView, View, StyleSheet } from 'react-native';
+import {signOut } from "firebase/auth";
+import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
-import {Picker} from '@react-native-picker/picker';
-import { updateDoc } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import * as ImagePicker from 'expo-image-picker';
-import { doc, getDocs, query, where } from "firebase/firestore";
-import { pickImage, uploadImageToFirebase } from '../utils/imageUpload';
-import BackButton from '../components/BackButton';
 import { getUserProfile } from '../utils/userProfile';
-import { Avatar, Divider, Text, Button, ActivityIndicator} from 'react-native-paper';
+import { Avatar, Divider, Text, Button, ActivityIndicator, useTheme} from 'react-native-paper';
+import theme from '../components/theme';
+import { Ionicons } from '@expo/vector-icons';
 
-const ViewProfileScreen = () => {
+
+const ViewProfileScreen = ({mockFunction}) => {
     const [name, setName] = useState('');
     const [school, setSchool] = useState('');
     const [yearOfStudy, setYearOfStudy] = useState('');
@@ -23,13 +20,21 @@ const ViewProfileScreen = () => {
     const [bio, setBio] = useState('');
     const [image, setImage] = useState(null);
     const [refresh, setRefresh] = useState(false)
-    const [isRefeshing, setIsRefreshing] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
-    //const [imageChanged, setImageChanged] = useState(false);
+    const [willingToTeach, setWilling] = useState(false);
+
 
     const userId = auth.currentUser.uid;
-    const navigation = useNavigation();
+    const navigation = mockFunction ? mockFunction : useNavigation();
 
+    const handleSignOut = () => {
+      signOut(auth)
+      .then(() => {
+        navigation.navigate("Login");
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
 
     useEffect(() => {
       setIsLoading(true);
@@ -38,13 +43,13 @@ const ViewProfileScreen = () => {
               setName(userProfile.name);
               setSchool(userProfile.school);
               setYearOfStudy(userProfile.yearOfStudy);
-              
               setCourse(userProfile.course);
               setModules(userProfile.modules);
               setGender(userProfile.gender);
               setStudySpot(userProfile.studySpot);
               setBio(userProfile.bio);
               setImage(userProfile.image);
+              setWilling(userProfile.willingToTeach);
           })
           .catch((error) => {
               console.error('Error getting profile:', error);
@@ -54,58 +59,78 @@ const ViewProfileScreen = () => {
           });
   }, [refresh]);
 
+  
   return (
-    <SafeAreaView style={styles.container}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <SafeAreaView style={styles.container}>
         <ScrollView>
         <View  style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            
+
             <View>
-                <Avatar.Image style={{marginTop: 40, marginBottom:30}} source={{uri: image}} size={200} />
+                <Avatar.Image style={{marginTop: 20, marginBottom:20}} source={{uri: image}} size={200} />
             </View >
 
-        
             <Text>
-                <Text style={{fontSize:30, textAlign: 'center'}}> {name} ({gender[0]?.toUpperCase()})</Text>
+                <Text style={{fontSize:35, textAlign: 'center'}}> {name} </Text>
             </Text>
-            
+
             <Divider />
-          
+
             <View style={styles.infoContainer}>
                 <Text style={styles.words}>{school?.toUpperCase()}</Text>
                 <Divider style={styles.divider} />
-                <Text>Year {yearOfStudy}</Text>
+                <Text style={styles.words}>Year {yearOfStudy}</Text>
                 <Divider style={styles.divider} />
                 <Text style={styles.words}>{course.charAt(0).toUpperCase() + course.slice(1)}</Text>
             </View>
 
-            <Divider />
-
-            <Text style={{marginTop:5}}> Modules taking: {modules.map(x => x + ", ")}</Text>
-         
-            <Divider />
-
-            <View style={{marginTop:10, marginHorizontal: 30}}> 
-                <Text style={styles.words}>{bio}</Text>
+            <View style={{flexDirection: 'row', marginTop:10, marginHorizontal: 30}}> 
+                <Ionicons name="person-circle" size={24} color="black" />
+                <Text style={styles.words_bio}>{bio}</Text>
             </View>
 
-            <Button onPress={() => navigation.navigate('EditProfileScreen')} mode="contained" style={{marginBottom:5, marginTop: 30, width:"50%"}}>
+            <View style={{flexDirection: 'row', marginTop:10, marginHorizontal: 30}}> 
+                <Ionicons name="book-outline" size={24} color="black" />
+                <Text style={styles.words_bio}> Modules taking: {modules.map(x => x + ", ")}</Text>
+            </View>
+
+            <View style={{flexDirection: 'row', marginTop:10, marginHorizontal: 30}}> 
+                <Ionicons name="location-outline" size={24} color="black" />
+                <Text style={[styles.words_bio]}>
+                  Preferred study spot: {studySpot }
+                </Text>
+            </View>
+
+            <View style={{marginTop:10, marginHorizontal: 30}}> 
+                <Text style={[styles.words_bio, {color: theme.colors.tertiary, fontWeight: 'bold'}]}>
+                  {willingToTeach ? 'Willing to Teach' : ''}
+                </Text>
+            </View>
+
+            <Button testID = "edit-profile" onPress={() => navigation.navigate('EditProfileScreen')} mode="contained" style={{marginTop: 15, width:"70%"}}>
                 Edit Profile
             </Button>
 
-            {
-              isLoading ? (
-                  <ActivityIndicator size="small" color="#0000ff" />
-              ) : (
-                  <Button onPress={()=>setRefresh(!refresh)} style={{marginBottom:20, width: "30%"}}>
-                      Refresh
-                  </Button>
-              )
-            }
+            <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 15}}>
+                {
+                  isLoading ? (
+                      <ActivityIndicator size="small" color="#0000ff" />
+                  ) : (
+                      <Button onPress={()=>setRefresh(!refresh)} style={{ width: "40%"}}>
+                          Refresh
+                      </Button>
+                  )
+                }
+
+                <Button onPress={handleSignOut} style={{width:"40%"}}>
+                    Sign Out
+                </Button>
+            </View>
+
         </View>
 
         </ScrollView>
     </SafeAreaView>
-  )
+)
 }
 
 export default ViewProfileScreen
@@ -136,9 +161,11 @@ const styles = StyleSheet.create({
       },
       words: {
         textAlign:'center',
-        fontSize:15,
+        fontSize:20,
         justifyContent:'center',
         alignItems:'center',
+        fontWeight:'bold',
+        color: theme.colors.primary
     }, infoContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -151,7 +178,11 @@ const styles = StyleSheet.create({
         height: StyleSheet.hairlineWidth,
         marginHorizontal: 10,
       },
-    
-
-
+      words_bio: {
+        textAlign:'center',
+        fontSize:15,
+        justifyContent:'center',
+        alignItems:'center',
+      }
+        
 })

@@ -1,15 +1,12 @@
-import React, { useState, useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat'
 import { auth, db } from '../firebase';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
-import { getUserProfile } from '../utils/userProfile';
-import { addDoc, collection, onSnapshot, orderBy, query, doc, where, serverTimestamp, Timestamp, updateDoc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, query, where, Timestamp, updateDoc, getDocs } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
-import { getUsersWithChatHistory } from "../utils/userProfile";
-
-//new
+import theme from '../components/theme';
 
 const Chats = ({route}) => {
   
@@ -18,21 +15,20 @@ const Chats = ({route}) => {
   const userId = auth.currentUser.uid
   const [messages, setMessages] = useState([])
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
-  }, [])  
-
+  // useEffect(() => {
+  //   setMessages([
+  //     {
+  //       _id: 1,
+  //       text: 'Hello developer',
+  //       createdAt: new Date(),
+  //       user: {
+  //         _id: 2,
+  //         name: 'React Native',
+  //         avatar: 'https://placeimg.com/140/140/any',
+  //       },
+  //     }, 
+  //   ])
+  // }, [])  
 
   const getAllMessages = async () => {
     const chatsRef = collection(db, 'Chats');
@@ -176,9 +172,9 @@ const Chats = ({route}) => {
     />)
   }
 
-
   return (
-    <GiftedChat
+    <View style={{ backgroundColor: theme.colors.secondaryContainer, flex: 1 }}>
+      <GiftedChat
       messages={messages}
       onSend={messages => onSend(messages)}
       user={{
@@ -189,10 +185,9 @@ const Chats = ({route}) => {
       renderSend={renderSend}
       showAvatarForEveryMessage={true}
     />
+    </View>
   )
 }
-
-
 
 export default Chats;
 

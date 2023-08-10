@@ -37,7 +37,7 @@ describe('WelcomeScreen', () => {
         navigate: jest.fn()
     }
     const { getByText } = render(<WelcomeScreen mockFunction={ navigation } />);
-    fireEvent.press(getByText('Log In'));
-    expect(navigation.navigate).toHaveBeenCalledWith('Login');
+    fireEvent.press(getByText('Register'));
+    expect(navigation.navigate).toHaveBeenCalledWith('Register');
   });
 });

@@ -11,9 +11,17 @@ global.alert = (message) => {
 jest.mock('@expo/vector-icons', () => ({
   Ionicons: 'Ionicons',
 }));
+
+
 jest.mock('react-native-vector-icons/Ionicons', () => ({
-    Ionicons: 'Ionicons',
-  }));
+  Ionicons: 'Ionicons',
+}));
+
+
+jest.mock('expo-document-picker', () => ({
+  getDocumentAsync: jest.fn(),
+}));
+  
   
 
 jest.mock('@react-navigation/native', () => {
@@ -23,6 +31,7 @@ jest.mock('@react-navigation/native', () => {
     }),
   };
 });
+
 
 jest.mock('@react-navigation/bottom-tabs', () => ({
 }))
